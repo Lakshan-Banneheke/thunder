@@ -14,21 +14,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
-{{- if .Values.persistence.enabled }}
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: ConfigMap
 metadata:
-  name: {{ include "thunder.fullname" . }}-data
+  name: {{ include "thunder.fullname" . }}-config
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "thunder.labels" . | nindent 4 }}
-spec:
-  accessModes:
-    - {{ .Values.persistence.accessMode }}
-  {{- if .Values.persistence.storageClass }}
-  storageClassName: {{ .Values.persistence.storageClass }}
-  {{- end }}
-  resources:
-    requests:
-      storage: {{ .Values.persistence.size }}
-{{- end }}
+data:
+  deployment.yaml: {{ tpl (.Files.Get "conf/deployment.yaml") . | quote }}
