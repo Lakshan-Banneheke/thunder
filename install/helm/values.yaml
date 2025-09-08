@@ -1,0 +1,147 @@
+# Default values for Thunder
+# This is a YAML-formatted file.
+
+replicaCount: 1
+
+image:
+  repository: thunder
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  className: "nginx"
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  hosts:
+    - host: thunder.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1024Mi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+# Thunder specific configurations
+thunder:
+  # Server configuration
+  server:
+    hostname: "0.0.0.0"
+    port: 8080
+
+  # Gate client configuration
+  gateClient:
+    hostname: "localhost"
+    port: 9090
+    scheme: "https"
+    loginPath: "/login"
+    errorPath: "/error"
+
+  # Security configuration
+  security:
+    certFile: "repository/resources/security/server.cert"
+    keyFile: "repository/resources/security/server.key"
+
+  # Database configuration
+  database:
+    identity:
+      type: "postgres" # postgres or sqlite
+      host: "localhost"
+      port: 5432
+      name: "thunder"
+      username: "thunder"
+      password: "thunder"
+      path: "repository/database"
+      sqlitePath: "repository/database/thunder.db"
+      options: "_journal_mode=WAL&_busy_timeout=5000"
+      sslmode: "disable"
+    # Runtime database configuration
+    runtime:
+      type: "postgres" # postgres or sqlite
+      host: "localhost"
+      port: 5432
+      name: "thunder"
+      username: "thunder"
+      password: "thunder"
+      path: "repository/database"
+      sqlitePath: "repository/database/thunder.db"
+      options: "_journal_mode=WAL&_busy_timeout=5000"
+      sslmode: "disable"
+
+  # Cache configuration
+  cache:
+    disabled: false
+    type: "inmemory"
+    size: 1000
+    ttl: 3600
+    evictionPolicy: "LRU"
+    cleanupInterval: 300
+
+  # OAuth configuration
+  oauth:
+    jwt:
+      issuer: "thunder"
+      validityPeriod: 3600
+    refreshToken:
+      renewOnGrant: false
+      validityPeriod: 86400
+
+  # Flow configuration
+  flow:
+    graphDirectory: "repository/resources/graphs/"
+    authn:
+      defaultFlow: "auth_flow_config_basic"
+
+  # CORS configuration
+  cors:
+    allowedOrigins:
+      - "https://localhost:3000"
+      - "https://localhost:9001"
+      - "https://localhost:9090"
+
+  # Secret key for JWT token generation
+  jwtSecret: "thunder-jwt-secret-key-change-in-production"
+
+  # Admin user credentials
+  adminUser:
+    username: "admin"
+    password: "admin"
+    email: "admin@example.com"
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

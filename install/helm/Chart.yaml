@@ -1,0 +1,7 @@
+apiVersion: v2
+name: thunder
+description: A Helm chart for Thunder - Lightweight user and identity management system
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+

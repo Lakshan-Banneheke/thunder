@@ -1,0 +1,69 @@
+server:
+  hostname: {{ .Values.thunder.server.hostname | quote }}
+  port: {{ .Values.thunder.server.port }}
+
+gate_client:
+  hostname: {{ .Values.thunder.gateClient.hostname | quote }}
+  port: {{ .Values.thunder.gateClient.port }}
+  scheme: {{ .Values.thunder.gateClient.scheme | quote }}
+  login_path: {{ .Values.thunder.gateClient.loginPath | quote }}
+  error_path: {{ .Values.thunder.gateClient.errorPath | quote }}
+
+security:
+  cert_file: {{ .Values.thunder.security.certFile | quote }}
+  key_file: {{ .Values.thunder.security.keyFile | quote }}
+
+database:
+  identity:
+    type: {{ .Values.thunder.database.identity.type | quote }}
+    {{- if eq .Values.thunder.database.identity.type "sqlite" }}
+    path: {{ .Values.thunder.database.identity.sqlitePath | quote }}
+    options: {{ .Values.thunder.database.identity.options | quote }}
+    {{- else }}
+    hostname: {{ .Values.thunder.database.identity.host | quote }}
+    port: {{ .Values.thunder.database.identity.port }}
+    name: {{ .Values.thunder.database.identity.name | quote }}
+    username: {{ .Values.thunder.database.identity.username | quote }}
+    password: {{ .Values.thunder.database.identity.password | quote }}
+    sslmode: {{ .Values.thunder.database.identity.sslmode | quote }}
+    {{- end }}
+  runtime:
+    type: {{ .Values.thunder.database.runtime.type | quote }}
+    {{- if eq .Values.thunder.database.runtime.type "sqlite" }}
+    path: {{ .Values.thunder.database.runtime.sqlitePath | quote }}
+    options: {{ .Values.thunder.database.runtime.options | quote }}
+    {{- else }}
+    hostname: {{ .Values.thunder.database.runtime.host | quote }}
+    port: {{ .Values.thunder.database.runtime.port }}
+    name: {{ .Values.thunder.database.runtime.name | quote }}
+    username: {{ .Values.thunder.database.runtime.username | quote }}
+    password: {{ .Values.thunder.database.runtime.password | quote }}
+    sslmode: {{ .Values.thunder.database.runtime.sslmode | quote }}
+    {{- end }}
+
+cache:
+  disabled: {{ .Values.thunder.cache.disabled }}
+  type: {{ .Values.thunder.cache.type | quote }}
+  size: {{ .Values.thunder.cache.size }}
+  ttl: {{ .Values.thunder.cache.ttl }}
+  eviction_policy: {{ .Values.thunder.cache.evictionPolicy | quote }}
+  cleanup_interval: {{ .Values.thunder.cache.cleanupInterval }}
+
+oauth:
+  jwt:
+    issuer: {{ .Values.thunder.oauth.jwt.issuer | quote }}
+    validity_period: {{ .Values.thunder.oauth.jwt.validityPeriod }}
+  refresh_token:
+    renew_on_grant: {{ .Values.thunder.oauth.refreshToken.renewOnGrant }}
+    validity_period: {{ .Values.thunder.oauth.refreshToken.validityPeriod }}
+
+flow:
+  graph_directory: {{ .Values.thunder.flow.graphDirectory | quote }}
+  authn:
+    default_flow: {{ .Values.thunder.flow.authn.defaultFlow | quote }}
+
+cors:
+  allowed_origins:
+  {{- range .Values.thunder.cors.allowedOrigins }}
+    - {{ . | quote }}
+  {{- end }}
