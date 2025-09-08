@@ -17,12 +17,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "thunder.fullname" . }}
+  name: {{ include "thunder.fullname" . }}-deployment
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "thunder.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.deployment.replicaCount }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.deployment.strategy.rollingUpdate.maxUnavailable }}
+    type: RollingUpdate
   selector:
     matchLabels:
       {{- include "thunder.selectorLabels" . | nindent 6 }}
@@ -30,89 +35,96 @@ spec:
     metadata:
       labels:
         {{- include "thunder.selectorLabels" . | nindent 8 }}
-      {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        checksum.deployment.yaml: {{ include (print $.Template.BasePath "/cm-deployment.yaml") . | sha256sum }}
+        {{- if .Values.deployment.apparmor.enabled }}
+        container.apparmor.security.beta.kubernetes.io/wso2is: {{ .Values.deployment.apparmor.profile }}
+        {{- end }}
     spec:
       serviceAccountName: {{ include "thunder.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      {{- with .Values.imagePullSecrets }}
+        {{- if .Values.deployment.securityContext.enableRunAsUser }}
+        runAsUser: {{ .Values.deployment.securityContext.runAsUser }}
+        {{- end }}
+        {{- if .Values.deployment.securityContext.seccompProfile.enabled }}
+        seccompProfile:
+          type: {{ .Values.deployment.securityContext.seccompProfile.type }}
+        {{- end }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - {{ include "thunder.name" . }}
+                    - key: app.kubernetes.io/instance
+                      operator: In
+                      values:
+                        - {{ .Release.Name }}
+                topologyKey: topology.kubernetes.io/zone
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - name: {{ .Values.deployment.image.imagePullSecret }}
+      terminationGracePeriodSeconds: {{ .Values.deployment.terminationGracePeriodSeconds }}
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          env:
-            - name: THUNDER_DB_TYPE
-              value: {{ .Values.thunder.database.type | quote }}
-            - name: THUNDER_DB_HOST
-              value: {{ .Values.thunder.database.host | quote }}
-            - name: THUNDER_DB_PORT
-              value: {{ .Values.thunder.database.port | quote }}
-            - name: THUNDER_DB_NAME
-              value: {{ .Values.thunder.database.name | quote }}
-            - name: THUNDER_DB_USERNAME
-              value: {{ .Values.thunder.database.username | quote }}
-            - name: THUNDER_DB_PASSWORD
-              value: {{ .Values.thunder.database.password | quote }}
-            - name: THUNDER_JWT_SECRET
-              value: {{ .Values.thunder.jwtSecret | quote }}
-            - name: THUNDER_ADMIN_USERNAME
-              value: {{ .Values.thunder.adminUser.username | quote }}
-            - name: THUNDER_ADMIN_PASSWORD
-              value: {{ .Values.thunder.adminUser.password | quote }}
-            - name: THUNDER_ADMIN_EMAIL
-              value: {{ .Values.thunder.adminUser.email | quote }}
-          ports:
-            - name: http
-              containerPort: 8080
-              protocol: TCP
+        - name: thunder
+          {{- if .Values.deployment.image.digest }}
+          image: {{ .Values.deployment.image.registry }}/{{ .Values.deployment.image.repository }}@{{ .Values.deployment.image.digest }}
+          {{- else }}
+          image: {{ .Values.deployment.image.registry }}/{{ .Values.deployment.image.repository }}:{{ default "latest" .Values.deployment.image.tag }}
+          {{- end }}
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          startupProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - nc -z localhost 8090
+            initialDelaySeconds: {{ .Values.deployment.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.startupProbe.periodSeconds }}
+            failureThreshold: {{ .Values.deployment.startupProbe.failureThreshold }}
           livenessProbe:
             httpGet:
-              path: /api/health
-              port: http
-            initialDelaySeconds: 30
-            periodSeconds: 10
+              path: /health/liveness
+              port: {{ .Values.deployment.container.port }}
+              scheme: HTTPS
+            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
           readinessProbe:
             httpGet:
-              path: /api/health
-              port: http
-            initialDelaySeconds: 15
-            periodSeconds: 5
+              path: /health/readiness
+              port: {{ .Values.deployment.container.port }}
+              scheme: HTTPS
+            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            requests:
+              memory: {{ .Values.deployment.resources.requests.memory }}
+              cpu: {{ .Values.deployment.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.deployment.resources.limits.memory }}
+              cpu: {{ .Values.deployment.resources.limits.cpu }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            {{- if .Values.deployment.apparmor.enabled }}
+            appArmorProfile:
+              type: {{ .Values.deployment.apparmor.profile }}
+            {{- end }}
+            capabilities:
+              drop:
+                - all
+          ports:
+            - containerPort: {{ .Values.deployment.container.port }}
+              protocol: TCP
           volumeMounts:
-            - name: config-volume
-              mountPath: /app/backend/cmd/server/repository/conf/deployment.yaml
+            - name: deployment-yaml-volume
+              mountPath: /repository/conf/deployment.yaml
               subPath: deployment.yaml
-          {{- if .Values.persistence.enabled }}
-            - name: thunder-data
-              mountPath: /app/data
-          {{- end }}
       volumes:
-        - name: config-volume
+        - name: deployment-yaml-volume
           configMap:
-            name: {{ include "thunder.fullname" . }}-config
-      {{- if .Values.persistence.enabled }}
-        - name: thunder-data
-          persistentVolumeClaim:
-            claimName: {{ include "thunder.fullname" . }}-data
-      {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+            name: {{ include "thunder.fullname" . }}-cm-deployment
