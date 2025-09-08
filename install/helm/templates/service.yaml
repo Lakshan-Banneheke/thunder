@@ -17,16 +17,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "thunder.fullname" . }}
+  name: {{ include "thunder.fullname" . }}-service
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "thunder.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
-  ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
   selector:
     {{- include "thunder.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: servlet-https
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
