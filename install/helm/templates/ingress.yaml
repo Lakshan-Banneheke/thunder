@@ -1,44 +1,26 @@
-{{- if .Values.ingress.enabled -}}
-{{- $fullName := include "thunder.fullname" . -}}
-{{- $svcPort := .Values.service.port -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  annotations:
+    {{- toYaml .Values.ingress.combinedAnnotations | nindent 4 }}
+  name: {{ include "thunder.fullname" . }}-ingress
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "thunder.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
-  annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
 spec:
-  {{- if .Values.ingress.className }}
   ingressClassName: {{ .Values.ingress.className }}
-  {{- end }}
-  {{- if .Values.ingress.tls }}
-  tls:
-    {{- range .Values.ingress.tls }}
-    - hosts:
-        {{- range .hosts }}
-        - {{ . | quote }}
-        {{- end }}
-      secretName: {{ .secretName }}
-    {{- end }}
-  {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
+    - host: {{ .Values.ingress.hostname | quote }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            pathType: {{ .pathType }}
+          - path: /
+            pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ $fullName }}
+                name: {{ include "thunder.fullname" .  }}-service
                 port:
-                  number: {{ $svcPort }}
-          {{- end }}
-    {{- end }}
-{{- end }}
-
+                  number: {{ .Values.service.port }}
+  tls:
+  - hosts:
+    - {{ .Values.ingress.hostname | quote }}
+    secretName: {{ .Values.ingress.tlsSecretsName  }}
