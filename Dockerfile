@@ -56,7 +56,7 @@ RUN apk add --no-cache \
     unzip
 
 # Create thunder user and group
-RUN addgroup -S thunder && adduser -S thunder -G thunder
+RUN addgroup -S thunder && adduser -S -u 100 thunder -G thunder
 
 # Create application directory
 WORKDIR /opt/thunder

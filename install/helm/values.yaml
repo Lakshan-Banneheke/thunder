@@ -13,7 +13,7 @@ deployment:
     profile: "RuntimeDefault"
   securityContext:
     enableRunAsUser: true
-    runAsUser: 802
+    runAsUser: 100
     seccompProfile:
       enabled: true
       type: "RuntimeDefault"
