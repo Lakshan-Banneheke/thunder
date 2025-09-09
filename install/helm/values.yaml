@@ -29,7 +29,6 @@ deployment:
     # -- Container image tag. Either "tag" or "digest" should be defined
     tag: "latest"
     pullPolicy: "Always"
-    imagePullSecret: ""
   startupProbe:
     initialDelaySeconds: 10
     periodSeconds: 5

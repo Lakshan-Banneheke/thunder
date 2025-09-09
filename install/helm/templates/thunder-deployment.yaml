@@ -66,8 +66,10 @@ spec:
                       values:
                         - {{ .Release.Name }}
                 topologyKey: topology.kubernetes.io/zone
+      {{- if .Values.deployment.image.imagePullSecret }}
       imagePullSecrets:
         - name: {{ .Values.deployment.image.imagePullSecret }}
+      {{- end }}
       terminationGracePeriodSeconds: {{ .Values.deployment.terminationGracePeriodSeconds }}
       containers:
         - name: thunder
@@ -110,6 +112,9 @@ spec:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false
             runAsNonRoot: true
+            {{- if .Values.deployment.securityContext.enableRunAsUser }}
+            runAsUser: {{ .Values.deployment.securityContext.runAsUser }}
+            {{- end }}
             {{- if .Values.deployment.apparmor.enabled }}
             appArmorProfile:
               type: {{ .Values.deployment.apparmor.profile }}
