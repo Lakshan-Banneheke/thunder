@@ -18,26 +18,26 @@ deployment:
       enabled: true
       type: "RuntimeDefault"
   # Pod termination grace period. K8s API server waits this period after pre stop hook and sending TERM signal
-  terminationGracePeriodSeconds: 40
+  terminationGracePeriodSeconds: 10
   image:
     # -- Container image registry host name
-    registry: "lakshanbwso2"
+    registry: "ghcr.io/asgardeo"
     # -- Container image repository name
     repository: "thunder"
     # -- Container image digest
     digest: ""
     # -- Container image tag. Either "tag" or "digest" should be defined
-    tag: "latest"
+    tag: "0.6.0"
     pullPolicy: "Always"
   startupProbe:
-    initialDelaySeconds: 10
-    periodSeconds: 5
+    initialDelaySeconds: 1
+    periodSeconds: 2
     failureThreshold: 30
   livenessProbe:
     periodSeconds: 10
   readinessProbe:
-    initialDelaySeconds: 10
-    periodSeconds: 5
+    initialDelaySeconds: 1
+    periodSeconds: 1
   container:
     port: 8090
   resources:
@@ -108,7 +108,7 @@ configuration:
   # Database configuration
   database:
     identity:
-      type: "postgres" # postgres or sqlite
+      type: "sqlite" # postgres or sqlite
       host: "localhost"
       port: 5432
       name: "thunder"
@@ -120,7 +120,7 @@ configuration:
       sslmode: "disable"
     # Runtime database configuration
     runtime:
-      type: "postgres" # postgres or sqlite
+      type: "sqlite" # postgres or sqlite
       host: "localhost"
       port: 5432
       name: "thunder"

@@ -1,7 +1,7 @@
 apiVersion: v2
 name: thunder
-description: A Helm chart for Thunder - Lightweight user and identity management system
+description: A Helm chart for WSO2 Thunder - Lightweight user and identity management system
 type: application
-version: 0.1.0
+version: 0.0.1
 appVersion: "1.0.0"
 
