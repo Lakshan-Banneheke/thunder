@@ -88,16 +88,29 @@ The following table lists the configurable parameters of the Thunder chart and t
 | Name                                    | Description                                                                             | Default                        |
 | --------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------ |
 | `deployment.replicaCount`               | Number of Thunder replicas                                                              | `2`                            |
+| `deployment.strategy.rollingUpdate.maxSurge` | Maximum number of pods that can be created over the desired number during an update | `1`                           |
+| `deployment.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be unavailable during an update              | `0`                           |
 | `deployment.image.registry`             | Thunder image registry                                                                  | `ghcr.io/asgardeo`             |
 | `deployment.image.repository`           | Thunder image repository                                                                | `thunder`                      |
 | `deployment.image.tag`                  | Thunder image tag                                                                       | `0.7.0`                        |
+| `deployment.image.digest`               | Thunder image digest (use either tag or digest)                                         | `""`                           |
 | `deployment.image.pullPolicy`           | Thunder image pull policy                                                               | `Always`                       |
+| `deployment.terminationGracePeriodSeconds` | Pod termination grace period in seconds                                              | `10`                           |
+| `deployment.container.port`             | Thunder container port                                                                  | `8090`                         |
+| `deployment.startupProbe.initialDelaySeconds` | Startup probe initial delay seconds                                               | `1`                            |
+| `deployment.startupProbe.periodSeconds` | Startup probe period seconds                                                            | `2`                            |
+| `deployment.startupProbe.failureThreshold` | Startup probe failure threshold                                                      | `30`                           |
+| `deployment.livenessProbe.periodSeconds` | Liveness probe period seconds                                                          | `10`                           |
+| `deployment.readinessProbe.initialDelaySeconds` | Readiness probe initial delay seconds                                           | `1`                            |
+| `deployment.readinessProbe.periodSeconds` | Readiness probe period seconds                                                        | `10`                           |
 | `deployment.resources.limits.cpu`       | CPU resource limits                                                                     | `1.5`                          |
 | `deployment.resources.limits.memory`    | Memory resource limits                                                                  | `512Mi`                        |
 | `deployment.resources.requests.cpu`     | CPU resource requests                                                                   | `1`                            |
 | `deployment.resources.requests.memory`  | Memory resource requests                                                                | `256Mi`                        |
 | `deployment.securityContext.enableRunAsUser` | Enable running as non-root user                                                    | `true`                         |
 | `deployment.securityContext.runAsUser`  | User ID to run the container                                                            | `802`                          |
+| `deployment.securityContext.seccompProfile.enabled` | Enable seccomp profile                                                      | `false`                        |
+| `deployment.securityContext.seccompProfile.type` | Seccomp profile type                                                           | `RuntimeDefault`               |
 
 ### HPA Parameters
 
@@ -114,18 +127,79 @@ The following table lists the configurable parameters of the Thunder chart and t
 | -------------------------------- | ----------------------------------------------------------------- | ---------------------------- |
 | `service.port`                   | Thunder service port                                              | `8090`                       |
 
+### Service Account Parameters
+
+| Name                         | Description                                                | Default                       |
+| ---------------------------- | ---------------------------------------------------------- | ----------------------------- |
+| `serviceAccount.create`      | Enable creation of ServiceAccount                          | `true`                        |
+| `serviceAccount.name`        | Name of the service account to use                         | `thunder-service-account`     |
+
+### PDB Parameters
+
+| Name                        | Description                                                 | Default                       |
+| --------------------------- | ----------------------------------------------------------- | ----------------------------- |
+| `pdb.minAvailable`          | Minimum number of pods that must be available               | `50%`                         |
+
 ### Ingress Parameters
 
 | Name                                  | Description                                                     | Default                      |
 | ------------------------------------- | --------------------------------------------------------------- | ---------------------------- |
 | `ingress.className`                   | Ingress controller class                                        | `nginx`                      |
 | `ingress.hostname`                    | Default host for the ingress resource                           | `thunder.local`              |
+| `ingress.paths[0].path`               | Path for the ingress resource                                   | `/`                          |
+| `ingress.paths[0].pathType`           | Path type for the ingress resource                              | `Prefix`                     |
+| `ingress.tlsSecretsName`              | TLS secret name for HTTPS                                       | `thunder-tls`                |
+| `ingress.commonAnnotations`           | Common annotations for ingress                                  | See values.yaml              |
+| `ingress.customAnnotations`           | Custom annotations for ingress                                  | `{}`                         |
 
-## Configuration
+### Thunder Configuration Parameters
+
+| Name                                   | Description                                                     | Default                      |
+| -------------------------------------- | --------------------------------------------------------------- | ---------------------------- |
+| `configuration.server.hostname`        | Thunder server hostname                                         | `0.0.0.0`                    |
+| `configuration.server.port`            | Thunder server port                                             | `8090`                       |
+| `configuration.gateClient.hostname`    | Gate client hostname                                            | `0.0.0.0`                    |
+| `configuration.gateClient.port`        | Gate client port                                                | `9090`                       |
+| `configuration.gateClient.scheme`      | Gate client scheme                                              | `https`                      |
+| `configuration.gateClient.loginPath`   | Gate client login path                                          | `/login`                     |
+| `configuration.gateClient.errorPath`   | Gate client error path                                          | `/error`                     |
+| `configuration.security.certFile`      | Server certificate file path                                    | `repository/resources/security/server.cert` |
+| `configuration.security.keyFile`       | Server key file path                                            | `repository/resources/security/server.key`  |
+| `configuration.database.identity.type` | Identity database type (postgres or sqlite)                     | `postgres`                   |
+| `configuration.database.identity.sqlitePath` | SQLite database path (for sqlite only)                    | `repository/database/thunderdb.db` |
+| `configuration.database.identity.sqliteOptions` | SQLite options (for sqlite only)                       | `_journal_mode=WAL&_busy_timeout=5000` |
+| `configuration.database.identity.name` | Postgres database name (for postgres only)                      | `thunderdb`                  |
+| `configuration.database.identity.host` | Postgres host (for postgres only)                               | `wso2-thunder.postgres.database.azure.com` |
+| `configuration.database.identity.port` | Postgres port (for postgres only)                               | `5432`                       |
+| `configuration.database.identity.username` | Postgres username (for postgres only)                       | `sqladmin`                   |
+| `configuration.database.identity.password` | Postgres password (for postgres only)                       | `sdfds#4J2knc`              |
+| `configuration.database.identity.sslmode` | Postgres SSL mode (for postgres only)                        | `require`                    |
+| `configuration.database.runtime.type`  | Runtime database type (postgres or sqlite)                      | `postgres`                   |
+| `configuration.database.runtime.sqlitePath` | SQLite database path (for sqlite only)                     | `repository/database/runtimedb.db` |
+| `configuration.database.runtime.sqliteOptions` | SQLite options (for sqlite only)                        | `_journal_mode=WAL&_busy_timeout=5000` |
+| `configuration.database.runtime.name`  | Postgres database name (for postgres only)                      | `runtimedb`                  |
+| `configuration.database.runtime.host`  | Postgres host (for postgres only)                               | `wso2-thunder.postgres.database.azure.com` |
+| `configuration.database.runtime.port`  | Postgres port (for postgres only)                               | `5432`                       |
+| `configuration.database.runtime.username` | Postgres username (for postgres only)                        | `sqladmin`                   |
+| `configuration.database.runtime.password` | Postgres password (for postgres only)                        | `sdfds#4J2knc`              |
+| `configuration.database.runtime.sslmode` | Postgres SSL mode (for postgres only)                         | `require`                    |
+| `configuration.cache.disabled`         | Disable cache                                                   | `false`                      |
+| `configuration.cache.type`             | Cache type                                                      | `inmemory`                   |
+| `configuration.cache.size`             | Cache size                                                      | `1000`                       |
+| `configuration.cache.ttl`              | Cache TTL in seconds                                            | `3600`                       |
+| `configuration.cache.evictionPolicy`   | Cache eviction policy                                           | `LRU`                        |
+| `configuration.cache.cleanupInterval`  | Cache cleanup interval in seconds                               | `300`                        |
+| `configuration.oauth.jwt.issuer`       | JWT issuer                                                      | `thunder`                    |
+| `configuration.oauth.jwt.validityPeriod` | JWT validity period in seconds                                | `3600`                       |
+| `configuration.oauth.refreshToken.renewOnGrant` | Renew refresh token on grant                           | `false`                      |
+| `configuration.oauth.refreshToken.validityPeriod` | Refresh token validity period in seconds             | `86400`                      |
+| `configuration.flow.graphDirectory`    | Flow graph directory                                            | `repository/resources/graphs/` |
+| `configuration.flow.authn.defaultFlow` | Default authentication flow                                     | `auth_flow_config_basic`     |
+| `configuration.cors.allowedOrigins`    | CORS allowed origins                                            | See values.yaml              |
 
 ### Custom Configuration
 
-The Thunder configuration file (deployment.yaml) can be customized by overriding the default configuration in the values.yaml file. 
+The Thunder configuration file (deployment.yaml) can be customized by overriding the default configuration in the values.yaml file.
 Alternatively, you can directly update the values in conf/deployment.yaml before deploying the Helm chart.
 
 ### Database Configuration
