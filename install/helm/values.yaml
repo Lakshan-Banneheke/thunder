@@ -134,7 +134,7 @@ configuration:
       name: "thunderdb" 
       host: "localhost" 
       port: "5432" 
-      username: "asgthunder>" 
+      username: "asgthunder"
       password: "asgthunder" 
       sslmode: "require" 
     # Runtime database configuration
@@ -147,7 +147,7 @@ configuration:
       name: "runtimedb" 
       host: "localhost" 
       port: "5432" 
-      username: "asgthunder>" 
+      username: "asgthunder"
       password: "asgthunder" 
       sslmode: "require" 
 
