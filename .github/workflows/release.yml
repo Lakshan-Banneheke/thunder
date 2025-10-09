@@ -17,6 +17,11 @@ on:
         required: false
         type: boolean
         default: false
+      run_performance_test:
+        description: 'Run performance tests after release'
+        required: true
+        type: boolean
+        default: false
 
 # Add permissions to allow pushing tags and packages
 permissions:
@@ -635,6 +640,7 @@ jobs:
     name: 🧪 Trigger Performance Test
     runs-on: ubuntu-latest
     needs: release
+    if: ${{ github.event.inputs.run_performance_test == 'true' }}
     steps:
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
@@ -647,7 +653,7 @@ jobs:
             try {
               // Construct the Thunder pack URL using the release version
               const releaseTag = '${{ needs.release.outputs.release_tag }}';
-              const thunderPackUrl = `https://github.com/asgardeo/thunder/releases/download/${releaseTag}/thunder-${releaseTag.replace('v', '')}-linux-x64.zip`;
+              const thunderPackUrl = `https://github.com/${{ github.repository }}/releases/download/${releaseTag}/thunder-${releaseTag.replace('v', '')}-linux-x64.zip`;
               
               const result = await github.rest.actions.createWorkflowDispatch({
                 owner: 'asgardeo',
