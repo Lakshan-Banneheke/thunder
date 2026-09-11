@@ -162,13 +162,13 @@ Add following configuration parameters to application.properties file located in
 
 ```properties
 #OAuth Application Properties
-spring.security.oauth2.client.registration.thunderid.client-name=ThunderID
+spring.security.oauth2.client.registration.thunderid.client-name={{ProductName}}
 spring.security.oauth2.client.registration.thunderid.client-id=<your-app-client-id>
 spring.security.oauth2.client.registration.thunderid.client-secret=<your-app-client-secret>
 spring.security.oauth2.client.registration.thunderid.redirect-uri={baseUrl}/login/oauth2/code/thunderid
 spring.security.oauth2.client.registration.thunderid.authorization-grant-type=authorization_code
 spring.security.oauth2.client.registration.thunderid.scope=openid
-#ThunderID Properties
+#{{ProductName}} Properties
 spring.security.oauth2.client.provider.thunderid.issuer-uri=https://localhost:8090
 ```
 

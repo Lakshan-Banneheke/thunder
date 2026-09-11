@@ -35,7 +35,7 @@ an expiry.
 sequenceDiagram
   autonumber
   participant Agent as Ambient agent
-  participant TID as ThunderID
+  participant TID as {{ProductName}}
   actor User as The approver
   Agent->>TID: Requests approval, naming the person and the scopes.
   TID-->>Agent: Returns a request id and a polling interval.

@@ -165,7 +165,7 @@ try {
   await client.signIn()
 } catch (err) {
   if (err instanceof ThunderIDAPIError) {
-    // Handle API-level errors (HTTP 4xx/5xx from ThunderID)
+    // Handle API-level errors (HTTP 4xx/5xx from {{ProductName}})
     console.error(`API error ${err.statusCode}: ${err.message}`)
   } else if (err instanceof ThunderIDAuthException) {
     // Handle auth flow errors (PKCE, token exchange, endpoint resolution)

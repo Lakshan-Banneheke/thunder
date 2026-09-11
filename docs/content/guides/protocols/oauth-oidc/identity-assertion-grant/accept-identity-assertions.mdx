@@ -28,12 +28,12 @@ A client that already holds an ID-JAG from an external identity provider present
 sequenceDiagram
     participant Client as Client (confidential)
     participant IdP as External identity provider
-    participant TID as ThunderID
+    participant TID as {{ProductName}}
     participant API as Protected API
 
     Client->>IdP: User signs in with SSO
     IdP-->>Client: ID token
-    Client->>IdP: Exchange ID token for ID-JAG (audience = ThunderID issuer)
+    Client->>IdP: Exchange ID token for ID-JAG (audience = {{ProductName}} issuer)
     IdP-->>Client: ID-JAG
     Client->>TID: POST /oauth2/token (jwt-bearer grant, assertion = ID-JAG)
     Note over TID: Validates typ, trusted issuer, signature, audience, client binding

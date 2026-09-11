@@ -18,7 +18,7 @@ sequenceDiagram
   autonumber
   actor C as Customer
   participant AG as Concierge agent
-  participant TID as ThunderID
+  participant TID as {{ProductName}}
   participant API as Booking API
   C->>AG: Asks for flights, then to book one, presenting their own token.
   AG->>AG: Checks the customer's token carries the permission to use the agent.

@@ -76,10 +76,10 @@ Open the Console at <ConsoleUrl />, navigate to **Agents**, and click **Add Agen
 Create a `.env` file in your project with the agent credentials you just copied and your LLM provider API key. The same file works for both modes:
 
 ```bash title=".env"
-# ThunderID (local, self-signed cert)
+# {{ProductName}} (local, self-signed cert)
 THUNDERID_BASE_URL=https://localhost:8090
 
-# The agent's OAuth client credentials (from the ThunderID Console)
+# The agent's OAuth client credentials (from the {{ProductName}} Console)
 AGENT_CLIENT_ID=<your-agent-client-id>
 AGENT_SECRET=<your-agent-client-secret>
 
@@ -251,7 +251,7 @@ LLM_API_KEY     = os.environ.get("LLM_API_KEY", "")
 TOKEN_ENDPOINT = f"{BASE_URL}/oauth2/token"
 
 
-# --- ThunderID agent authentication (client_credentials) ---
+# --- {{ProductName}} agent authentication (client_credentials) ---
 def get_agent_token() -> str:
     """Fetch a brand new client_credentials token. No caching, no reuse."""
     data = {"grant_type": "client_credentials"}
@@ -425,7 +425,7 @@ const LLM_API_KEY     = process.env.LLM_API_KEY ?? "";
 
 const TOKEN_ENDPOINT = `${BASE_URL}/oauth2/token`;
 
-// --- ThunderID agent authentication (client_credentials) ---
+// --- {{ProductName}} agent authentication (client_credentials) ---
 async function getAgentToken(): Promise<string> {
   const body = new URLSearchParams({ grant_type: "client_credentials" });
   if (SCOPE) body.set("scope", SCOPE);
@@ -647,7 +647,7 @@ AUTHORIZE_ENDPOINT = f"{BASE_URL}/oauth2/authorize"
 TOKEN_ENDPOINT     = f"{BASE_URL}/oauth2/token"
 
 
-# --- ThunderID OBO authentication (authorization_code + PKCE) ---
+# --- {{ProductName}} OBO authentication (authorization_code + PKCE) ---
 def _b64url(raw: bytes) -> str:
     return base64.urlsafe_b64encode(raw).rstrip(b"=").decode()
 
@@ -899,7 +899,7 @@ const LLM_API_KEY     = process.env.LLM_API_KEY ?? "";
 const AUTHORIZE_ENDPOINT = `${BASE_URL}/oauth2/authorize`;
 const TOKEN_ENDPOINT     = `${BASE_URL}/oauth2/token`;
 
-// --- ThunderID OBO authentication (authorization_code + PKCE) ---
+// --- {{ProductName}} OBO authentication (authorization_code + PKCE) ---
 function b64url(buf: Buffer): string {
   return buf.toString("base64url");
 }
