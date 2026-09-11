@@ -20,7 +20,7 @@ val client = ThunderIDClient()
 
 client.initialize(
     config = ThunderIDConfig(
-        baseUrl = "https://localhost:8090",
+        baseUrl = "{{ServerUrl}}",
         clientId = "<your-client-id>",
         scopes = listOf("openid", "profile", "email"),
         afterSignInUrl = "dev.thunderid.app://callback",

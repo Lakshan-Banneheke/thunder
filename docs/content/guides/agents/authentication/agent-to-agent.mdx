@@ -24,7 +24,7 @@ Grant each worker only the scopes its sub-task needs, through its roles. See [Gr
 The worker requests its own token from the token endpoint, presenting the subject's token as `subject_token` and the acting agent's token as `actor_token`, and requesting a narrower scope:
 
 ```bash
-curl -X POST https://localhost:8090/oauth2/token \
+curl -X POST {{ServerUrl}}/oauth2/token \
   -H 'Content-Type: application/x-www-form-urlencoded' \
   -u '<WORKER_CLIENT_ID>:<WORKER_CLIENT_SECRET>' \
   -d 'grant_type=urn:ietf:params:oauth:grant-type:token-exchange' \

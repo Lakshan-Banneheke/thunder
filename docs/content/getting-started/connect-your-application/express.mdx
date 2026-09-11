@@ -50,7 +50,7 @@ Start a local <ProductName /> instance. Pick the method that works best for you:
 
 <RunThunderID />
 
-Once it's running, the console is available at [https://localhost:8090/console](https://localhost:8090/console).
+Once it's running, the console is available at <ConsoleUrl />.
 
 ## Create an Application
 
@@ -136,7 +136,7 @@ app.use(express.json());
 
 app.use(
   thunderID({
-    baseUrl: 'https://localhost:8090',
+    baseUrl: '{{ServerUrl}}',
     clientId: '<your-client-id>',
     clientSecret: '<your-client-secret>',
     afterSignInUrl: 'http://localhost:3000/login',

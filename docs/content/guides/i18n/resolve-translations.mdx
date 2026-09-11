@@ -15,7 +15,7 @@ Retrieve all language tags that have translations in the system. This endpoint r
 
 **Request:**
 ```bash
-curl -X GET https://localhost:8090/i18n/languages
+curl -X GET {{ServerUrl}}/i18n/languages
 ```
 **Response:**
 ```json
@@ -30,13 +30,13 @@ Before adding translations for a new language, resolve the default `en-US` trans
 
 **Request:**
 ```bash
-curl -X GET "https://localhost:8090/i18n/languages/en-US/translations/resolve"
+curl -X GET "{{ServerUrl}}/i18n/languages/en-US/translations/resolve"
 ```
 
 You can also filter by namespace to focus on a specific screen:
 
 ```bash
-curl -X GET "https://localhost:8090/i18n/languages/en-US/translations/resolve?namespace=signin"
+curl -X GET "{{ServerUrl}}/i18n/languages/en-US/translations/resolve?namespace=signin"
 ```
 
 The response lists every key with its default English value. Use these keys as a reference when building your translation payload for another language.
@@ -51,7 +51,7 @@ Resolve endpoints require no authentication and return `200` even when only syst
 
 **Request:**
 ```bash
-curl -X GET "https://localhost:8090/i18n/languages/es/translations/resolve"
+curl -X GET "{{ServerUrl}}/i18n/languages/es/translations/resolve"
 ```
 
 **Response:**
@@ -79,7 +79,7 @@ Add the `namespace` query parameter to retrieve translations for a single namesp
 
 **Request:**
 ```bash
-curl -X GET "https://localhost:8090/i18n/languages/es/translations/resolve?namespace=signin"
+curl -X GET "{{ServerUrl}}/i18n/languages/es/translations/resolve?namespace=signin"
 ```
 
 ### Resolve a Single Key
@@ -88,7 +88,7 @@ Resolve a specific translation by language, namespace, and key.
 
 **Request:**
 ```bash
-curl -X GET "https://localhost:8090/i18n/languages/es/translations/ns/recovery/keys/forms.username.title/resolve"
+curl -X GET "{{ServerUrl}}/i18n/languages/es/translations/ns/recovery/keys/forms.username.title/resolve"
 ```
 
 **Response:**

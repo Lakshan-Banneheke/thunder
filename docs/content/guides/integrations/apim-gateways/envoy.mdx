@@ -171,7 +171,7 @@ http_filters:
       "@type": type.googleapis.com/envoy.extensions.filters.http.jwt_authn.v3.JwtAuthentication
       providers:
         thunderid:
-          issuer: "https://localhost:8090"
+          issuer: "{{ServerUrl}}"
           remote_jwks:
             http_uri:
               uri: "https://127.0.0.1:8090/oauth2/jwks"
@@ -393,7 +393,7 @@ http_filters:
       "@type": type.googleapis.com/envoy.extensions.filters.http.jwt_authn.v3.JwtAuthentication
       providers:
         thunderid:
-          issuer: "https://localhost:8090"
+          issuer: "{{ServerUrl}}"
           remote_jwks:
             http_uri:
               uri: "https://127.0.0.1:8090/oauth2/jwks"
@@ -856,10 +856,10 @@ http_filters:
       "@type": type.googleapis.com/envoy.extensions.filters.http.jwt_authn.v3.JwtAuthentication
       providers:
         thunderid:
-          issuer: "https://localhost:8090"
+          issuer: "{{ServerUrl}}"
           remote_jwks:
             http_uri:
-              uri: "https://localhost:8090/oauth2/jwks"
+              uri: "{{ServerUrl}}/oauth2/jwks"
               cluster: thunderid
               timeout: 5s
             cache_duration: 300s
@@ -984,10 +984,10 @@ http_filters:
       "@type": type.googleapis.com/envoy.extensions.filters.http.jwt_authn.v3.JwtAuthentication
       providers:
         thunderid:
-          issuer: "https://localhost:8090"
+          issuer: "{{ServerUrl}}"
           remote_jwks:
             http_uri:
-              uri: "https://localhost:8090/oauth2/jwks"
+              uri: "{{ServerUrl}}/oauth2/jwks"
               cluster: thunderid
               timeout: 5s
             cache_duration: 300s
@@ -1091,7 +1091,7 @@ The gRPC example also uses `failure_mode_allow: false`. Keep this setting unless
 Start the authorization adapter with the <ProductName /> PDP settings:
 
 ```bash
-export THUNDERID_BASE_URL="https://localhost:8090"
+export THUNDERID_BASE_URL="{{ServerUrl}}"
 export THUNDERID_DIRECT_AUTH_SECRET="<direct-auth-secret>"
 export AUTHZEN_ADAPTER_PORT=8181
 export AUTHZEN_GRPC_ADAPTER_PORT=8182

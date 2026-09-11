@@ -48,7 +48,7 @@ Start a local <ProductName /> instance. Pick the method that works best for you:
 
 <RunThunderID />
 
-Once it's running, the console is available at [https://localhost:8090/console](https://localhost:8090/console).
+Once it's running, the console is available at <ConsoleUrl />.
 
 ## Create an Application
 
@@ -156,7 +156,7 @@ class MainActivity : ComponentActivity() {
             MaterialTheme {
                 ThunderIDProvider(
                     config = ThunderIDConfig(
-                        baseUrl = "https://localhost:8090",
+                        baseUrl = "{{ServerUrl}}",
                         scopes = listOf("openid", "profile", "email"),
                         applicationId = "<your-application-id>",
                         storage = EncryptedStorageAdapter(applicationContext),

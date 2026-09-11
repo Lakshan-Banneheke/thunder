@@ -17,7 +17,7 @@ import { ThunderIDNodeConfig } from '@thunderid/node'
 
 const config: ThunderIDNodeConfig = {
   clientId: '<your-client-id>',
-  serverOrigin: 'https://localhost:8090',
+  serverOrigin: '{{ServerUrl}}',
   afterSignInUrl: 'http://localhost:3000/callback',
   afterSignOutUrl: 'http://localhost:3000',
   sessionCookieExpiryTime: 28800, // 8 hours
@@ -48,7 +48,7 @@ The SDK resolves the session cookie expiry time in the following order, using th
 | Property | Type | Required | Description |
 | :--- | :--- | :---: | :--- |
 | `clientId` | `string` | ✅ | The client ID of your application registered in <ProductName />. |
-| `serverOrigin` | `string` | ✅ | The base URL of the <ProductName /> instance (for example, `https://localhost:8090`). |
+| `serverOrigin` | `string` | ✅ | The base URL of the <ProductName /> instance (for example, `{{ServerUrl}}`). |
 | `afterSignInUrl` | `string` | ❌ | The URL to redirect to after a successful sign-in. |
 | `afterSignOutUrl` | `string` | ❌ | The URL to redirect to after sign-out. |
 | `clientSecret` | `string` | ❌ | The client secret. Required for confidential clients only. |
@@ -61,7 +61,7 @@ import { ThunderIDNodeConfig } from '@thunderid/node'
 
 const config: ThunderIDNodeConfig = {
   clientId: '<your-client-id>',
-  serverOrigin: 'https://localhost:8090',
+  serverOrigin: '{{ServerUrl}}',
   afterSignInUrl: 'http://localhost:3000/callback',
   afterSignOutUrl: 'http://localhost:3000',
   scope: ['openid', 'profile'],

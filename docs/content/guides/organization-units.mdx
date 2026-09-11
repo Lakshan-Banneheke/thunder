@@ -116,7 +116,7 @@ When creating an OU through the API, you can also provide the following optional
 **Example: create an OU with branding:**
 
 ```bash
-curl -kL -X POST "https://localhost:8090/organization-units" \
+curl -kL -X POST "{{ServerUrl}}/organization-units" \
   -H 'Authorization: Bearer <access-token>' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -146,14 +146,14 @@ When using the Organization Unit APIs, each OU response also includes system met
 To retrieve an OU by its ID:
 
 ```bash
-curl -kL "https://localhost:8090/organization-units/{id}" \
+curl -kL "{{ServerUrl}}/organization-units/{id}" \
   -H 'Authorization: Bearer <access-token>'
 ```
 
 To retrieve an OU by its hierarchical handle path:
 
 ```bash
-curl -kL "https://localhost:8090/organization-units/tree/{path}" \
+curl -kL "{{ServerUrl}}/organization-units/tree/{path}" \
   -H 'Authorization: Bearer <access-token>'
 ```
 
@@ -167,7 +167,7 @@ curl -kL "https://localhost:8090/organization-units/tree/{path}" \
 To update an OU using the API by its ID:
 
 ```bash
-curl -kL -X PUT "https://localhost:8090/organization-units/{id}" \
+curl -kL -X PUT "{{ServerUrl}}/organization-units/{id}" \
   -H 'Authorization: Bearer <access-token>' \
   -H 'Content-Type: application/json' \
   -d '{"name": "Engineering Team", "handle": "engineering", "parent": null}'
@@ -176,7 +176,7 @@ curl -kL -X PUT "https://localhost:8090/organization-units/{id}" \
 To update by hierarchical path:
 
 ```bash
-curl -kL -X PUT "https://localhost:8090/organization-units/tree/{path}" \
+curl -kL -X PUT "{{ServerUrl}}/organization-units/tree/{path}" \
   -H 'Authorization: Bearer <access-token>' \
   -H 'Content-Type: application/json' \
   -d '{"name": "Engineering Team", "handle": "engineering", "parent": null}'
@@ -234,35 +234,35 @@ attribute operator "value" [AND|OR attribute operator "value" ...]
 **Filter by exact name:**
 
 ```bash
-curl -kL "https://localhost:8090/organization-units?filter=name%20eq%20%22Engineering%22" \
+curl -kL "{{ServerUrl}}/organization-units?filter=name%20eq%20%22Engineering%22" \
   -H 'Authorization: Bearer <access-token>'
 ```
 
 **Filter with AND, both conditions must match:**
 
 ```bash
-curl -kL "https://localhost:8090/organization-units?filter=name%20eq%20%22Engineering%22%20AND%20handle%20eq%20%22engineering%22" \
+curl -kL "{{ServerUrl}}/organization-units?filter=name%20eq%20%22Engineering%22%20AND%20handle%20eq%20%22engineering%22" \
   -H 'Authorization: Bearer <access-token>'
 ```
 
 **Filter with OR, either condition may match:**
 
 ```bash
-curl -kL "https://localhost:8090/organization-units?filter=name%20eq%20%22Engineering%22%20OR%20name%20eq%20%22Sales%22" \
+curl -kL "{{ServerUrl}}/organization-units?filter=name%20eq%20%22Engineering%22%20OR%20name%20eq%20%22Sales%22" \
   -H 'Authorization: Bearer <access-token>'
 ```
 
 **Filter children by timestamp range:**
 
 ```bash
-curl -kL "https://localhost:8090/organization-units/<parent-id>/ous?filter=createdAt%20gt%20%222024-01-01T00:00:00Z%22" \
+curl -kL "{{ServerUrl}}/organization-units/<parent-id>/ous?filter=createdAt%20gt%20%222024-01-01T00:00:00Z%22" \
   -H 'Authorization: Bearer <access-token>'
 ```
 
 **Combine filter with pagination:**
 
 ```bash
-curl -kL "https://localhost:8090/organization-units?filter=name%20eq%20%22Engineering%22&limit=10&offset=0" \
+curl -kL "{{ServerUrl}}/organization-units?filter=name%20eq%20%22Engineering%22&limit=10&offset=0" \
   -H 'Authorization: Bearer <access-token>'
 ```
 
@@ -278,21 +278,21 @@ curl -kL "https://localhost:8090/organization-units?filter=name%20eq%20%22Engine
 ### Using Organization Unit ID
 
 ```bash
-curl -kL "https://localhost:8090/organization-units/{id}/users" \
+curl -kL "{{ServerUrl}}/organization-units/{id}/users" \
   -H 'Authorization: Bearer <access-token>'
 ```
 
 ### Using Hierarchical Path
 
 ```bash
-curl -kL "https://localhost:8090/organization-units/tree/{path}/users" \
+curl -kL "{{ServerUrl}}/organization-units/tree/{path}/users" \
   -H 'Authorization: Bearer <access-token>'
 ```
 
 Append `include=display` to include a human-readable display name for each user:
 
 ```bash
-curl -kL "https://localhost:8090/organization-units/{id}/users?include=display" \
+curl -kL "{{ServerUrl}}/organization-units/{id}/users?include=display" \
   -H 'Authorization: Bearer <access-token>'
 ```
 
@@ -303,14 +303,14 @@ The response includes pagination fields (`totalResults`, `startIndex`, `count`) 
 ### Using Organization Unit ID
 
 ```bash
-curl -kL "https://localhost:8090/organization-units/{id}/groups" \
+curl -kL "{{ServerUrl}}/organization-units/{id}/groups" \
   -H 'Authorization: Bearer <access-token>'
 ```
 
 ### Using Hierarchical Path
 
 ```bash
-curl -kL "https://localhost:8090/organization-units/tree/{path}/groups" \
+curl -kL "{{ServerUrl}}/organization-units/tree/{path}/groups" \
   -H 'Authorization: Bearer <access-token>'
 ```
 
@@ -328,14 +328,14 @@ Deletion fails if the OU still contains users, groups, or child OUs. Delete or r
 To delete an OU using the API by its ID:
 
 ```bash
-curl -kL -X DELETE "https://localhost:8090/organization-units/{id}" \
+curl -kL -X DELETE "{{ServerUrl}}/organization-units/{id}" \
   -H 'Authorization: Bearer <access-token>'
 ```
 
 To delete by hierarchical path:
 
 ```bash
-curl -kL -X DELETE "https://localhost:8090/organization-units/tree/{path}" \
+curl -kL -X DELETE "{{ServerUrl}}/organization-units/tree/{path}" \
   -H 'Authorization: Bearer <access-token>'
 ```
 

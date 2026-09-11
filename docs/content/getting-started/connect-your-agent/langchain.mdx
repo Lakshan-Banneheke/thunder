@@ -77,7 +77,7 @@ Create a `.env` file in your project with the agent credentials you just copied 
 
 ```bash title=".env"
 # ThunderID (local, self-signed cert)
-THUNDERID_BASE_URL=https://localhost:8090
+THUNDERID_BASE_URL={{ServerUrl}}
 
 # The agent's OAuth client credentials (from the ThunderID Console)
 AGENT_CLIENT_ID=<your-agent-client-id>
@@ -241,7 +241,7 @@ from langchain.agents.middleware import AgentMiddleware
 # --- Configuration (loaded from .env) ---
 load_dotenv()
 
-BASE_URL        = os.environ.get("THUNDERID_BASE_URL", "https://localhost:8090")
+BASE_URL        = os.environ.get("THUNDERID_BASE_URL", "{{ServerUrl}}")
 AGENT_CLIENT_ID = os.environ["AGENT_CLIENT_ID"]  # the agent's OAuth client_id
 AGENT_SECRET    = os.environ["AGENT_SECRET"]     # the agent's OAuth client_secret
 SCOPE           = os.environ.get("AGENT_SCOPE", "")  # optional, space-separated
@@ -416,7 +416,7 @@ import { initChatModel } from "langchain/chat_models/universal";
 import { createAgent, createMiddleware } from "langchain";
 
 // --- Configuration (loaded from .env) ---
-const BASE_URL        = process.env.THUNDERID_BASE_URL ?? "https://localhost:8090";
+const BASE_URL        = process.env.THUNDERID_BASE_URL ?? "{{ServerUrl}}";
 const AGENT_CLIENT_ID = process.env.AGENT_CLIENT_ID!;  // the agent's OAuth client_id
 const AGENT_SECRET    = process.env.AGENT_SECRET!;     // the agent's OAuth client_secret
 const SCOPE           = process.env.AGENT_SCOPE ?? ""; // optional, space-separated
@@ -636,7 +636,7 @@ from langgraph.runtime import Runtime
 # --- Configuration (loaded from .env) ---
 load_dotenv()
 
-BASE_URL        = os.environ.get("THUNDERID_BASE_URL", "https://localhost:8090")
+BASE_URL        = os.environ.get("THUNDERID_BASE_URL", "{{ServerUrl}}")
 AGENT_CLIENT_ID = os.environ["AGENT_CLIENT_ID"]  # the agent's OAuth client_id
 AGENT_SECRET    = os.environ["AGENT_SECRET"]     # the agent's OAuth client_secret
 REDIRECT_URI    = os.environ.get("REDIRECT_URI", "http://localhost:6274/callback")
@@ -889,7 +889,7 @@ import { initChatModel } from "langchain/chat_models/universal";
 import { createAgent, createMiddleware } from "langchain";
 
 // --- Configuration (loaded from .env) ---
-const BASE_URL        = process.env.THUNDERID_BASE_URL ?? "https://localhost:8090";
+const BASE_URL        = process.env.THUNDERID_BASE_URL ?? "{{ServerUrl}}";
 const AGENT_CLIENT_ID = process.env.AGENT_CLIENT_ID!;
 const AGENT_SECRET    = process.env.AGENT_SECRET!;
 const REDIRECT_URI    = process.env.REDIRECT_URI ?? "http://localhost:6274/callback";

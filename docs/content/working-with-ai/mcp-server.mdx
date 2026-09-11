@@ -16,7 +16,7 @@ import TabItem from '@theme/TabItem';
 
 ## Overview
 
-The MCP server is available through the `/mcp` endpoint of your <ProductName /> instance (default: `https://localhost:8090/mcp`). MCP clients discover the available tools automatically through the protocol.
+The MCP server is available through the `/mcp` endpoint of your <ProductName /> instance (default: `{{ServerUrl}}/mcp`). MCP clients discover the available tools automatically through the protocol.
 
 ### Authentication
 
@@ -26,7 +26,7 @@ Access requires the `system` scope, and permissions come from the signed-in user
 
 ## Prerequisites
 
-- <ProductName /> server running (default: `https://localhost:8090`)
+- <ProductName /> server running (default: `{{ServerUrl}}`)
 - Access to the <ProductName /> Console with an administrator account
 - Node.js and npm installed (to run MCP Inspector via `npx`)
 - Claude Code CLI installed (only for the Claude Code option)
@@ -70,7 +70,7 @@ If the file already exists, append the origin to the existing `allowedOrigins` l
 
 ### Trust the <ProductName /> Certificate
 
-MCP Inspector's proxy runs on Node.js. Point Node.js at the <ProductName /> self-signed certificate so TLS connections to `https://localhost:8090` are trusted, without adding anything to your system trust store:
+MCP Inspector's proxy runs on Node.js. Point Node.js at the <ProductName /> self-signed certificate so TLS connections to `{{ServerUrl}}` are trusted, without adding anything to your system trust store:
 
 ```bash
 export NODE_EXTRA_CA_CERTS=<THUNDERID_HOME>/config/certs/server.cert
@@ -89,7 +89,7 @@ The Inspector UI opens at `http://localhost:6274`.
 ### Connect to the MCP Server
 
 1. Set **Transport Type** to **Streamable HTTP**.
-2. Set **URL** to `https://localhost:8090/mcp`.
+2. Set **URL** to `{{ServerUrl}}/mcp`.
 3. Expand the **Authentication** section and select **OAuth**.
 4. Enter the **Client ID** you copied earlier. Leave **Client Secret** empty.
 5. Set **Scope** to `system`.
@@ -133,7 +133,7 @@ Restart <ProductName /> after saving the file.
 
 #### Trust the Certificate for Claude Code
 
-Claude Code runs on Node.js. Point it at the <ProductName /> self-signed certificate so TLS connections to `https://localhost:8090` are trusted, without adding anything to your system trust store:
+Claude Code runs on Node.js. Point it at the <ProductName /> self-signed certificate so TLS connections to `{{ServerUrl}}` are trusted, without adding anything to your system trust store:
 
 ```bash
 export NODE_EXTRA_CA_CERTS=<THUNDERID_HOME>/config/certs/server.cert
@@ -144,7 +144,7 @@ export NODE_EXTRA_CA_CERTS=<THUNDERID_HOME>/config/certs/server.cert
 #### Add the MCP Server to Claude Code
 
 ```bash
-claude mcp add --transport http thunderid-mcp https://localhost:8090/mcp
+claude mcp add --transport http thunderid-mcp {{ServerUrl}}/mcp
 ```
 
 Verify it was added:
@@ -290,7 +290,7 @@ The signed-in user lacks administrator permissions, or the scope was not set to 
 Verify <ProductName /> is running and the endpoint is reachable:
 
 ```bash
-curl -k https://localhost:8090/mcp
+curl -k {{ServerUrl}}/mcp
 ```
 
 A `401 Unauthorized` response with a `WWW-Authenticate` header confirms the endpoint is up and secured. Any other error indicates the server is not running or the URL is incorrect.

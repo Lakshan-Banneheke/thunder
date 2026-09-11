@@ -35,6 +35,13 @@ function renderUrl(baseUrl: string, {path = '', plain = false}: UrlComponentProp
 }
 
 /**
+ * Renders a URL to the local <ProductName /> server, based on the `local.serverUrl` configuration.
+ */
+export function ServerUrl(props: UrlComponentProps): ReactNode {
+  return renderUrl(useProductConfig().local.serverUrl, props);
+}
+
+/**
  * Renders a URL to the local <ProductName /> Console, based on the `local.consoleUrl` configuration.
  */
 export function ConsoleUrl(props: UrlComponentProps): ReactNode {

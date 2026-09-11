@@ -124,7 +124,7 @@ seed, then `start` to serve.
 :::
 
 :::tip Success
-Access <ProductName /> on **https://localhost:8090/console**
+Access <ProductName /> on **<ConsoleUrl plain />**
 :::
 
 </Stepper>
@@ -159,7 +159,7 @@ This command will automatically:
 
 
 :::tip Success
-Access <ProductName /> on **https://localhost:8090/console**
+Access <ProductName /> on **<ConsoleUrl plain />**
 :::
 
 </Stepper>
@@ -233,7 +233,7 @@ helm install {{productSlug}} oci://ghcr.io/thunder-id/helm-charts/{{productSlug}
   --set configuration.database.entity.postgres.sslmode=disable \
   --set configuration.database.runtime_persistent.postgres.hostname=postgresql \
   --set configuration.database.runtime_persistent.postgres.sslmode=disable \
-  --set configuration.server.publicUrl=https://localhost:8090 \
+  --set configuration.server.publicUrl={{ServerUrl}} \
   --set configuration.gateClient.hostname=localhost \
   --set configuration.gateClient.port=8090
 ```
@@ -258,10 +258,10 @@ When no password is configured (the default), the setup job generates a random a
 kubectl get secret {{productSlug}}-admin-credentials -o jsonpath="{.data.admin-password}" | base64 -d; echo
 ```
 
-Open `https://localhost:8090/console` and sign in using the admin username with that password.
+Open `{{ConsoleUrl}}` and sign in using the admin username with that password.
 
 :::tip Success
-Access <ProductName /> on **https://localhost:8090/console**
+Access <ProductName /> on **<ConsoleUrl plain />**
 :::
 
 </Stepper>

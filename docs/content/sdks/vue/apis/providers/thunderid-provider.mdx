@@ -24,7 +24,7 @@ A minimal setup involves wrapping your root component with `<ThunderIDProvider /
 <template>
   <ThunderIDProvider
     client-id="<your-app-client-id>"
-    base-url="https://localhost:8090"
+    base-url="{{ServerUrl}}"
   >
     <router-view />
   </ThunderIDProvider>
@@ -58,7 +58,7 @@ const scopes = [
 <template>
   <ThunderIDProvider
     client-id="<your-app-client-id>"
-    base-url="https://localhost:8090"
+    base-url="{{ServerUrl}}"
     :scopes="scopes"
     after-sign-in-url="/dashboard"
     after-sign-out-url="/home"
@@ -79,7 +79,7 @@ The `ThunderIDProvider` component accepts the following props:
 | Prop | Type | Required | Description |
 | :--- | :--- | :---: | :--- |
 | `clientId` | `string` | ✅ | Client ID of your application |
-| `baseUrl` | `string` | ✅ | The base URL of the <ProductName /> instance (e.g., `https://localhost:8090`) |
+| `baseUrl` | `string` | ✅ | The base URL of the <ProductName /> instance (e.g., `{{ServerUrl}}`) |
 | `applicationId` | `string` | ❌ | The <ProductName /> application ID |
 | `afterSignInUrl` | `string` | ❌ | URL to redirect to after sign-in completes. Defaults to `window.location.origin`. |
 | `afterSignOutUrl` | `string` | ❌ | URL to redirect to after sign-out completes. Defaults to `window.location.origin`. |

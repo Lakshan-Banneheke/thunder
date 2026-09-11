@@ -23,7 +23,7 @@ final token = await thunder.client.getAccessToken();
 final client = ThunderIDClient();
 await client.initialize(
   config: ThunderIDConfig(
-    baseUrl: 'https://localhost:8090',
+    baseUrl: '{{ServerUrl}}',
     clientId: '<your-client-id>',
     scopes: const ['openid', 'profile', 'email'],
   ),

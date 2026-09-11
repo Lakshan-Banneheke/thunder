@@ -18,7 +18,7 @@ import { executeEmbeddedRecoveryFlowV2, EmbeddedRecoveryFlowStatusV2 } from '@th
 
 // Step 1 — Initiate recovery
 const step1 = await executeEmbeddedRecoveryFlowV2({
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   payload: {
     applicationId: '<your-app-id>',
     flowType: 'PASSWORD_RECOVERY',
@@ -27,7 +27,7 @@ const step1 = await executeEmbeddedRecoveryFlowV2({
 
 // Step 2 — Provide the username/email to recover
 const step2 = await executeEmbeddedRecoveryFlowV2({
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   payload: {
     executionId: step1.executionId,
     inputs: {
@@ -38,7 +38,7 @@ const step2 = await executeEmbeddedRecoveryFlowV2({
 
 // Step 3 — Submit the OTP/token received by email
 const step3 = await executeEmbeddedRecoveryFlowV2({
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   payload: {
     executionId: step2.executionId,
     inputs: {

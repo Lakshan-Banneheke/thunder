@@ -100,7 +100,7 @@ Custom translations can be passed via the `preferences.i18n.bundles` configurati
 ```ts
 await client.initialize({
   clientId: '<your-client-id>',
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   preferences: {
     i18n: {
       language: 'en-US',

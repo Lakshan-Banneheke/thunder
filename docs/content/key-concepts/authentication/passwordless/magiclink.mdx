@@ -58,7 +58,7 @@ Applications configured with the `authorization_code` grant type cannot start fl
 1) **Start the flow.** Send an initial flow request.
 
 ```bash
-curl -X POST https://localhost:8090/flow/execute \
+curl -X POST {{ServerUrl}}/flow/execute \
   -H "Content-Type: application/json" \
   -d '{
   "applicationId": "<app-id>",
@@ -72,7 +72,7 @@ curl -X POST https://localhost:8090/flow/execute \
 
 For example
 ```bash
-curl -X POST https://localhost:8090/flow/execute \
+curl -X POST {{ServerUrl}}/flow/execute \
   -H "Content-Type: application/json" \
   -d '{
   "executionId": "<execution-id-from-step>",
@@ -96,7 +96,7 @@ When the user clicks the link in their email, they are redirected to your applic
 2) **Continue the flow.** Submit the token back to the flow engine for verification.
 
 ```bash
-curl -X POST https://localhost:8090/flow/execute \
+curl -X POST {{ServerUrl}}/flow/execute \
   -H "Content-Type: application/json" \
   -d '{
   "executionId": "<execution-id-from-step>",

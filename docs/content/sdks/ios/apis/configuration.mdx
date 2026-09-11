@@ -14,7 +14,7 @@ description: ThunderIDConfig options for the iOS SDK, covering client ID, base U
 import ThunderID
 
 let config = ThunderIDConfig(
-    baseUrl: "https://localhost:8090",
+    baseUrl: "{{ServerUrl}}",
     clientId: "<your-client-id>",
     scopes: ["openid", "profile", "email"],
     afterSignInUrl: "io.thunderid.b2c://callback",
@@ -27,7 +27,7 @@ let config = ThunderIDConfig(
 
 | Parameter | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `baseUrl` | `String` | - | **Required.** Your <ProductName /> instance URL. Must use HTTPS (e.g., `https://localhost:8090`). |
+| `baseUrl` | `String` | - | **Required.** Your <ProductName /> instance URL. Must use HTTPS (e.g., `{{ServerUrl}}`). |
 | `clientId` | `String?` | `nil` | The Client ID from your <ProductName /> application. Required for redirect-based authentication and token operations. |
 | `scopes` | `[String]` | `["openid"]` | OAuth 2.0 scopes to request. Include `"profile"` and `"email"` to receive user identity claims. |
 | `afterSignInUrl` | `String?` | `nil` | The redirect URI to return to after sign-in. Must match an **Allowed Redirect URI** registered in the console. |
@@ -50,7 +50,7 @@ Controls how the SDK validates ID tokens.
 
 ```swift
 ThunderIDConfig(
-    baseUrl: "https://localhost:8090",
+    baseUrl: "{{ServerUrl}}",
     clientId: "<your-client-id>",
     tokenValidation: TokenValidationConfig(
         validate: true,

@@ -50,7 +50,7 @@ Start a local <ProductName /> instance. Pick the method that works best for you:
 
 <RunThunderID />
 
-Once it's running, the console is available at [https://localhost:8090/console](https://localhost:8090/console).
+Once it's running, the console is available at <ConsoleUrl />.
 
 ## Create an Application
 
@@ -132,7 +132,7 @@ const auth = new ThunderIDBrowserClient()
 
 await auth.initialize({
   clientId: '<your-client-id>',
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   afterSignInUrl: window.location.origin,
   afterSignOutUrl: window.location.origin,
 })
@@ -149,7 +149,7 @@ Replace `<your-client-id>` with the Client ID you obtained when creating the app
 | Parameter | Description |
 |-----------|-------------|
 | `clientId` | The Client ID from your <ProductName /> application |
-| `baseUrl` | Your <ProductName /> instance URL (e.g., `https://localhost:8090`) |
+| `baseUrl` | Your <ProductName /> instance URL (e.g., `{{ServerUrl}}`) |
 | `afterSignInUrl` | URL to redirect to after sign-in (defaults to current origin) |
 | `afterSignOutUrl` | URL to redirect to after sign-out (defaults to current origin) |
 

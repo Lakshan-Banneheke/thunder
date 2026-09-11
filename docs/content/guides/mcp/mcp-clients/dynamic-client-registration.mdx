@@ -52,7 +52,7 @@ Restart <ProductName /> for the configuration change to take effect.
 Confirm DCR accepts registrations by registering a throwaway public client directly:
 
 ```bash
-curl -sk -i -X POST https://localhost:8090/oauth2/dcr/register \
+curl -sk -i -X POST {{ServerUrl}}/oauth2/dcr/register \
   -H "Content-Type: application/json" \
   -d '{
     "client_name": "dcr-probe",

@@ -50,7 +50,7 @@ Start a local <ProductName /> instance. Pick the method that works best for you:
 
 <RunThunderID />
 
-Once it's running, the console is available at [https://localhost:8090/console](https://localhost:8090/console).
+Once it's running, the console is available at <ConsoleUrl />.
 
 ## Create an Application
 
@@ -126,7 +126,7 @@ import { ThunderIDNodeClient } from '@thunderid/node';
 const client = new ThunderIDNodeClient();
 
 await client.initialize({
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   clientId: '<your-client-id>',
   clientSecret: '<your-client-secret>',
   grantType: 'client_credentials',
@@ -146,7 +146,7 @@ Replace `<your-client-id>` and `<your-client-secret>` with the **Client ID** and
 
 | Parameter | Description |
 |-----------|-------------|
-| `baseUrl` | Your <ProductName /> instance URL (e.g., `https://localhost:8090`) |
+| `baseUrl` | Your <ProductName /> instance URL (e.g., `{{ServerUrl}}`) |
 | `clientId` | The Client ID from your <ProductName /> application |
 | `clientSecret` | The Client Secret from your <ProductName /> application |
 | `grantType` | Set to `'client_credentials'` to authenticate the service as itself, with no user and no browser redirect |
@@ -161,7 +161,7 @@ import { ThunderIDNodeClient } from '@thunderid/node';
 const client = new ThunderIDNodeClient();
 
 await client.initialize({
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   clientId: '<your-client-id>',
   clientSecret: '<your-client-secret>',
   grantType: 'client_credentials',

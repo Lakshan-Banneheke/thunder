@@ -20,7 +20,7 @@ Before you begin, make sure you have:
   ```bash
   export TOKEN="<access-token>"
 
-  curl -kL -X PUT https://localhost:8090/server-config/cors \
+  curl -kL -X PUT {{ServerUrl}}/server-config/cors \
     -H 'Content-Type: application/json' \
     -H "Authorization: Bearer $TOKEN" \
     -d '{ "allowedOrigins": ["http://localhost:5173"] }'
@@ -47,7 +47,7 @@ Import the Wayfinder configuration bundle.
 
 2. **Import the bundle into <ProductName />.**
 
-   - Sign in to the <ProductName /> Console at [https://localhost:8090/console](https://localhost:8090/console).
+   - Sign in to the <ProductName /> Console at <ConsoleUrl />.
    - On first sign-in, a welcome screen appears with an **Open** button. (Later, reach the same screen from the user profile menu in the top-right corner of the Console.)
    - Click **Open** and select your `thunderid-config/redirect/thunderid-config.yaml` file from the sample distribution.
    - Select your `thunderid-config/redirect/thunderid.env` file to provide the environment variables referenced in the YAML.

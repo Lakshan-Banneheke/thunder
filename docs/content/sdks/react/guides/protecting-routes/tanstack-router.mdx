@@ -82,7 +82,7 @@ const router = createRouter({ routeTree })
 function App() {
   return (
     <ThunderIDProvider
-      baseUrl="https://localhost:8090"
+      baseUrl="{{ServerUrl}}"
       clientId="your-client-id"
     >
       <RouterProvider router={router} />
@@ -226,7 +226,7 @@ const router = createRouter({ routeTree })
 function App() {
   return (
     <ThunderIDProvider
-      baseUrl="https://localhost:8090"
+      baseUrl="{{ServerUrl}}"
       clientId="your-client-id"
     >
       <RouterProvider router={router} />

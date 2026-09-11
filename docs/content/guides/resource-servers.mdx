@@ -41,7 +41,7 @@ Permission strings use one of two forms. Flat permissions, for server-level acti
 Send a `POST` request to `/resource-servers`:
 
 ```bash
-curl -kL -X POST https://localhost:8090/resource-servers \
+curl -kL -X POST {{ServerUrl}}/resource-servers \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer <access-token>' \
   -d '{
@@ -89,7 +89,7 @@ You define permissions by creating actions. Actions can exist at two levels: dir
 Create actions directly on the resource server for simple, non-hierarchical permissions.
 
 ```bash
-curl -kL -X POST https://localhost:8090/resource-servers/<resource-server-id>/actions \
+curl -kL -X POST {{ServerUrl}}/resource-servers/<resource-server-id>/actions \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer <access-token>' \
   -d '{
@@ -120,7 +120,7 @@ For fine-grained access control, create resources first, then add actions to tho
 **1. Create a resource:**
 
 ```bash
-curl -kL -X POST https://localhost:8090/resource-servers/<resource-server-id>/resources \
+curl -kL -X POST {{ServerUrl}}/resource-servers/<resource-server-id>/resources \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer <access-token>' \
   -d '{
@@ -132,7 +132,7 @@ curl -kL -X POST https://localhost:8090/resource-servers/<resource-server-id>/re
 **2. Add an action to the resource:**
 
 ```bash
-curl -kL -X POST https://localhost:8090/resource-servers/<resource-server-id>/resources/<resource-id>/actions \
+curl -kL -X POST {{ServerUrl}}/resource-servers/<resource-server-id>/resources/<resource-id>/actions \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer <access-token>' \
   -d '{
@@ -148,7 +148,7 @@ The resulting permission is `reservations:create`.
 Resources can nest to form deeper hierarchies. Set the `parent` field to the parent resource ID:
 
 ```bash
-curl -kL -X POST https://localhost:8090/resource-servers/<resource-server-id>/resources \
+curl -kL -X POST {{ServerUrl}}/resource-servers/<resource-server-id>/resources \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer <access-token>' \
   -d '{
@@ -167,7 +167,7 @@ The `handle` and `parent` fields on a resource are immutable after creation.
 ## List Resource Servers
 
 ```bash
-curl -kL https://localhost:8090/resource-servers?limit=10&offset=0 \
+curl -kL {{ServerUrl}}/resource-servers?limit=10&offset=0 \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer <access-token>'
 ```
@@ -175,7 +175,7 @@ curl -kL https://localhost:8090/resource-servers?limit=10&offset=0 \
 ## Get Resource Server Details
 
 ```bash
-curl -kL https://localhost:8090/resource-servers/<resource-server-id> \
+curl -kL {{ServerUrl}}/resource-servers/<resource-server-id> \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer <access-token>'
 ```
@@ -185,7 +185,7 @@ curl -kL https://localhost:8090/resource-servers/<resource-server-id> \
 Update the name, description, identifier, or organization unit. The `delimiter` cannot be changed.
 
 ```bash
-curl -kL -X PUT https://localhost:8090/resource-servers/<resource-server-id> \
+curl -kL -X PUT {{ServerUrl}}/resource-servers/<resource-server-id> \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer <access-token>' \
   -d '{
@@ -199,7 +199,7 @@ curl -kL -X PUT https://localhost:8090/resource-servers/<resource-server-id> \
 ## Delete a Resource Server
 
 ```bash
-curl -kL -X DELETE https://localhost:8090/resource-servers/<resource-server-id> \
+curl -kL -X DELETE {{ServerUrl}}/resource-servers/<resource-server-id> \
   -H 'Authorization: Bearer <access-token>'
 ```
 
@@ -214,7 +214,7 @@ You must delete all child resources and actions before you can delete a resource
 List top-level resources (no parent):
 
 ```bash
-curl -kL https://localhost:8090/resource-servers/<resource-server-id>/resources \
+curl -kL {{ServerUrl}}/resource-servers/<resource-server-id>/resources \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer <access-token>'
 ```
@@ -222,7 +222,7 @@ curl -kL https://localhost:8090/resource-servers/<resource-server-id>/resources 
 List child resources of a specific parent:
 
 ```bash
-curl -kL "https://localhost:8090/resource-servers/<resource-server-id>/resources?parentId=<parent-resource-id>" \
+curl -kL "{{ServerUrl}}/resource-servers/<resource-server-id>/resources?parentId=<parent-resource-id>" \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer <access-token>'
 ```
@@ -232,7 +232,7 @@ curl -kL "https://localhost:8090/resource-servers/<resource-server-id>/resources
 You can update the `name` and `description`. The `handle` and `parent` cannot be changed.
 
 ```bash
-curl -kL -X PUT https://localhost:8090/resource-servers/<resource-server-id>/resources/<resource-id> \
+curl -kL -X PUT {{ServerUrl}}/resource-servers/<resource-server-id>/resources/<resource-id> \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer <access-token>' \
   -d '{
@@ -244,7 +244,7 @@ curl -kL -X PUT https://localhost:8090/resource-servers/<resource-server-id>/res
 ### Delete a Resource
 
 ```bash
-curl -kL -X DELETE https://localhost:8090/resource-servers/<resource-server-id>/resources/<resource-id> \
+curl -kL -X DELETE {{ServerUrl}}/resource-servers/<resource-server-id>/resources/<resource-id> \
   -H 'Authorization: Bearer <access-token>'
 ```
 
@@ -257,7 +257,7 @@ You must delete all sub-resources and actions within a resource before deleting 
 List resource server level actions:
 
 ```bash
-curl -kL https://localhost:8090/resource-servers/<resource-server-id>/actions \
+curl -kL {{ServerUrl}}/resource-servers/<resource-server-id>/actions \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer <access-token>'
 ```
@@ -265,7 +265,7 @@ curl -kL https://localhost:8090/resource-servers/<resource-server-id>/actions \
 List actions on a specific resource:
 
 ```bash
-curl -kL https://localhost:8090/resource-servers/<resource-server-id>/resources/<resource-id>/actions \
+curl -kL {{ServerUrl}}/resource-servers/<resource-server-id>/resources/<resource-id>/actions \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer <access-token>'
 ```
@@ -275,7 +275,7 @@ curl -kL https://localhost:8090/resource-servers/<resource-server-id>/resources/
 You can update the `name` and `description`. The `handle` cannot be changed.
 
 ```bash
-curl -kL -X PUT https://localhost:8090/resource-servers/<resource-server-id>/actions/<action-id> \
+curl -kL -X PUT {{ServerUrl}}/resource-servers/<resource-server-id>/actions/<action-id> \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer <access-token>' \
   -d '{
@@ -287,7 +287,7 @@ curl -kL -X PUT https://localhost:8090/resource-servers/<resource-server-id>/act
 ### Delete an Action
 
 ```bash
-curl -kL -X DELETE https://localhost:8090/resource-servers/<resource-server-id>/actions/<action-id> \
+curl -kL -X DELETE {{ServerUrl}}/resource-servers/<resource-server-id>/actions/<action-id> \
   -H 'Authorization: Bearer <access-token>'
 ```
 

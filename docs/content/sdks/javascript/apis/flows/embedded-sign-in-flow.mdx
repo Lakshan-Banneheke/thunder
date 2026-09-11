@@ -21,7 +21,7 @@ Send an OAuth 2.0 authorization request directly to the <ProductName /> authoriz
 import { initializeEmbeddedSignInFlow } from '@thunderid/javascript'
 
 const response = await initializeEmbeddedSignInFlow({
-  url: 'https://localhost:8090/oauth2/authorize',
+  url: '{{ServerUrl}}/oauth2/authorize',
   payload: {
     response_type: 'code',
     client_id: '<your-client-id>',
@@ -87,7 +87,7 @@ Submit the response for a flow step (e.g., credentials) and advance the flow.
 import { executeEmbeddedSignInFlow } from '@thunderid/javascript'
 
 const response = await executeEmbeddedSignInFlow({
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   payload: {
     flowId: response.flowId,
     selectedAuthenticator: {

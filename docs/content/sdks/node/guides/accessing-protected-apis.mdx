@@ -24,7 +24,7 @@ import auth from '../auth'
 export async function fetchUserProfile(sessionId: string) {
   const accessToken = await auth.getAccessToken(sessionId)
 
-  const response = await fetch('https://localhost:8090/users/<user_id>', {
+  const response = await fetch('{{ServerUrl}}/users/<user_id>', {
     headers: {
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
@@ -76,8 +76,8 @@ export async function fetchDashboardData(sessionId: string) {
   }
 
   const [profile, organizations] = await Promise.all([
-    fetch('https://localhost:8090/users/<user_id>', { headers }).then(r => r.json()),
-    fetch('https://localhost:8090/organizations', { headers }).then(r => r.json()),
+    fetch('{{ServerUrl}}/users/<user_id>', { headers }).then(r => r.json()),
+    fetch('{{ServerUrl}}/organizations', { headers }).then(r => r.json()),
   ])
 
   return { organizations, profile }

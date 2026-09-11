@@ -41,6 +41,8 @@ export interface DocusaurusProductConfig {
     };
   };
   local: {
+    /** Base URL of a locally running server, without a trailing slash. */
+    serverUrl: string;
     consoleUrl: string;
     samples: {
       wayfinderUrl: string;
@@ -89,6 +91,7 @@ const DocusaurusProductConfig = {
     },
   },
   local: {
+    serverUrl: 'https://localhost:8090',
     consoleUrl: 'https://localhost:8090/console',
     samples: {
       wayfinderUrl: 'http://localhost:5173',

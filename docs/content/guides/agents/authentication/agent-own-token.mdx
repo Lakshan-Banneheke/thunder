@@ -17,7 +17,7 @@ In the Console, on the **Tokens** tab, under **Issued to**, select **Agent** (th
 ## Get the agent token
 
 ```bash
-curl -X POST https://localhost:8090/oauth2/token \
+curl -X POST {{ServerUrl}}/oauth2/token \
   -H 'Content-Type: application/x-www-form-urlencoded' \
   -u '<CLIENT_ID>:<CLIENT_SECRET>' \
   -d 'grant_type=client_credentials' \
@@ -52,7 +52,7 @@ There is no `act` claim, because the agent acts as itself and not for anyone els
 
 ## Call a protected API with the agent token
 
-Send the token as a Bearer token. The resource verifies the token's signature with the keys from `https://localhost:8090/oauth2/jwks`, checks the `iss`, `aud`, and `exp` claims, then authorizes the request against `scope`. To identify the caller, the resource reads `sub` (the agent itself), `sub_type` (`agent`, to apply policy that differs by identity class), and `client_id` (the OAuth client that obtained the token); there is no `act` claim, because the agent acts as itself.
+Send the token as a Bearer token. The resource verifies the token's signature with the keys from `{{ServerUrl}}/oauth2/jwks`, checks the `iss`, `aud`, and `exp` claims, then authorizes the request against `scope`. To identify the caller, the resource reads `sub` (the agent itself), `sub_type` (`agent`, to apply policy that differs by identity class), and `client_id` (the OAuth client that obtained the token); there is no `act` claim, because the agent acts as itself.
 
 ```bash
 curl https://api.example.com/invoices -H 'Authorization: Bearer <ACCESS_TOKEN>'

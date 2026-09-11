@@ -18,7 +18,7 @@ import { executeEmbeddedSignUpFlowV2, EmbeddedSignUpFlowStatusV2 } from '@thunde
 
 // Step 1 — Initiate
 const step1 = await executeEmbeddedSignUpFlowV2({
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   payload: {
     applicationId: '<your-app-id>',
     flowType: 'REGISTRATION',
@@ -27,7 +27,7 @@ const step1 = await executeEmbeddedSignUpFlowV2({
 
 // Step 2 — Provide registration details
 const step2 = await executeEmbeddedSignUpFlowV2({
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   payload: {
     executionId: step1.executionId,
     inputs: {

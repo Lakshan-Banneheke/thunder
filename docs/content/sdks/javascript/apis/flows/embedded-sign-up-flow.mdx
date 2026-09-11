@@ -21,7 +21,7 @@ Execute a step in the embedded registration flow.
 import { executeEmbeddedSignUpFlow, EmbeddedFlowType } from '@thunderid/javascript'
 
 const response = await executeEmbeddedSignUpFlow({
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   payload: {
     flowType: EmbeddedFlowType.Registration,
     // step-specific fields

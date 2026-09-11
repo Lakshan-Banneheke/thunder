@@ -18,7 +18,7 @@ const auth = new ThunderIDBrowserClient()
 
 await auth.initialize({
   clientId: '<your-client-id>',
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
 })
 ```
 
@@ -29,7 +29,7 @@ await auth.initialize({
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `clientId` | `string` | The Client ID from your <ProductName /> application |
-| `baseUrl` | `string` | Your <ProductName /> instance URL (e.g., `https://localhost:8090`) |
+| `baseUrl` | `string` | Your <ProductName /> instance URL (e.g., `{{ServerUrl}}`) |
 
 ### Authentication Parameters
 
@@ -79,7 +79,7 @@ Data persists for the browser tab lifetime. Each tab maintains an independent se
 ```js
 await auth.initialize({
   clientId: '<your-client-id>',
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   storage: 'sessionStorage',
 })
 ```
@@ -91,7 +91,7 @@ Data persists across tabs and browser restarts. Use when you want sessions to su
 ```js
 await auth.initialize({
   clientId: '<your-client-id>',
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   storage: 'localStorage',
 })
 ```
@@ -103,7 +103,7 @@ Data exists only in memory and is lost on page reload. Use for the highest secur
 ```js
 await auth.initialize({
   clientId: '<your-client-id>',
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   storage: 'browserMemory',
 })
 ```
@@ -117,7 +117,7 @@ const auth = new ThunderIDBrowserClient()
 
 await auth.initialize({
   clientId: '<your-client-id>',
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   afterSignInUrl: 'http://localhost:5173',
   afterSignOutUrl: 'http://localhost:5173',
   scopes: ['openid', 'profile', 'email'],

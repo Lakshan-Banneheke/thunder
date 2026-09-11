@@ -40,7 +40,7 @@ void main() {
   runApp(
     ThunderIDProvider(
       config: ThunderIDConfig(
-        baseUrl: 'https://localhost:8090',
+        baseUrl: '{{ServerUrl}}',
         clientId: '<your-client-id>',
         scopes: const ['openid', 'profile', 'email'],
         afterSignInUrl: 'dev.thunderid.app://callback',

@@ -20,7 +20,7 @@ import auth from './auth.js'
 
 async function fetchUserData(userId) {
   const response = await auth.httpRequest({
-    url: `https://localhost:8090/users/${userId}`,
+    url: `{{ServerUrl}}/users/${userId}`,
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -38,7 +38,7 @@ import auth from './auth.js'
 
 async function updateProfile(data) {
   const response = await auth.httpRequest({
-    url: 'https://localhost:8090/users/me',
+    url: '{{ServerUrl}}/users/me',
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -60,12 +60,12 @@ import auth from './auth.js'
 async function loadDashboardData() {
   const [usersResponse, rolesResponse] = await auth.httpRequestAll([
     {
-      url: 'https://localhost:8090/users',
+      url: '{{ServerUrl}}/users',
       method: 'GET',
       headers: { Accept: 'application/json' },
     },
     {
-      url: 'https://localhost:8090/roles',
+      url: '{{ServerUrl}}/roles',
       method: 'GET',
       headers: { Accept: 'application/json' },
     },
@@ -113,7 +113,7 @@ import auth from './auth.js'
 async function fetchData() {
   try {
     const response = await auth.httpRequest({
-      url: 'https://localhost:8090/users',
+      url: '{{ServerUrl}}/users',
       method: 'GET',
     })
 

@@ -14,7 +14,7 @@ description: ThunderIDConfig options for the Android SDK, covering client ID, ba
 import dev.thunderid.android.ThunderIDConfig
 
 val config = ThunderIDConfig(
-    baseUrl = "https://localhost:8090",
+    baseUrl = "{{ServerUrl}}",
     clientId = "<your-client-id>",
     scopes = listOf("openid", "profile", "email"),
     afterSignInUrl = "dev.thunderid.app://callback",
@@ -27,7 +27,7 @@ val config = ThunderIDConfig(
 
 | Parameter | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `baseUrl` | `String` | - | **Required.** Your <ProductName /> instance URL. Must use HTTPS (e.g., `https://localhost:8090`). |
+| `baseUrl` | `String` | - | **Required.** Your <ProductName /> instance URL. Must use HTTPS (e.g., `{{ServerUrl}}`). |
 | `clientId` | `String?` | `null` | The Client ID from your <ProductName /> application. Required for redirect-based authentication and token operations. |
 | `scopes` | `List<String>` | `["openid"]` | OAuth 2.0 scopes to request. Include `"profile"` and `"email"` to receive user identity claims. |
 | `afterSignInUrl` | `String?` | `null` | The redirect URI to return to after sign-in. Must match an **Allowed Redirect URI** registered in the console. |
@@ -50,7 +50,7 @@ Controls how the SDK validates ID tokens.
 
 ```kotlin
 ThunderIDConfig(
-    baseUrl = "https://localhost:8090",
+    baseUrl = "{{ServerUrl}}",
     clientId = "<your-client-id>",
     tokenValidation = TokenValidationConfig(
         validate = true,

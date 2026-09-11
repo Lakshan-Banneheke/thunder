@@ -52,7 +52,7 @@ export default function UserProfile() {
     (async () => {
       try {
         const response = await http.request({
-          url: 'https://localhost:8090/users/<user_id>',
+          url: '{{ServerUrl}}/users/<user_id>',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ import { http } from '@thunderid/react'
 export async function fetchUser(userId) {
   try {
     const response = await http.request({
-      url: `https://localhost:8090/users/${userId}`,
+      url: `{{ServerUrl}}/users/${userId}`,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ export default function UserProfile() {
 ```
 
 :::tip API Configuration
-Replace `<user_id>` with the actual user ID you want to fetch. The <ProductName /> API server runs on `https://localhost:8090` by default.
+Replace `<user_id>` with the actual user ID you want to fetch. The <ProductName /> API server runs on `{{ServerUrl}}` by default.
 :::
 
 :::note Storage Type Requirement
@@ -183,7 +183,7 @@ export default function UserProfile() {
         'Content-Type': 'application/json',
       },
       method: 'GET',
-      url: 'https://localhost:8090/users/<user_id>',
+      url: '{{ServerUrl}}/users/<user_id>',
     })
 
     requests.push({
@@ -192,7 +192,7 @@ export default function UserProfile() {
         'Content-Type': 'application/json',
       },
       method: 'GET',
-      url: 'https://localhost:8090/applications',
+      url: '{{ServerUrl}}/applications',
     })
 
     (async () => {
@@ -229,7 +229,7 @@ import { setContext } from '@apollo/client/link/context'
 
 export function createAuthenticatedClient(accessToken) {
   const httpLink = createHttpLink({
-    uri: 'https://localhost:8090/graphql',
+    uri: '{{ServerUrl}}/graphql',
   })
 
   const authLink = setContext((_, { headers }) => {

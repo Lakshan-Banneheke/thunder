@@ -31,7 +31,7 @@ Initialize the client with your application configuration. Must be called before
 ```ts
 await client.initialize({
   clientId: '<your-client-id>',
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   afterSignInUrl: 'http://localhost:3000',
   afterSignOutUrl: 'http://localhost:3000',
 })
@@ -115,7 +115,7 @@ Perform a token exchange request (RFC 8693 / custom grant). Sends a POST to the 
 
 ```ts
 const result = await client.exchangeToken({
-  tokenEndpoint: 'https://localhost:8090/oauth2/token',
+  tokenEndpoint: '{{ServerUrl}}/oauth2/token',
   data: {
     grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
     subject_token: '{{token}}',

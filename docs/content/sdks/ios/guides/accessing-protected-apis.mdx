@@ -19,7 +19,7 @@ import ThunderIDSwiftUI
 func fetchProtectedResource(state: ThunderIDState) async throws -> Data {
     let token = try await state.client.getAccessToken()
 
-    var request = URLRequest(url: URL(string: "https://localhost:8090/api/resource")!)
+    var request = URLRequest(url: URL(string: "{{ServerUrl}}/api/resource")!)
     request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     request.setValue("application/json", forHTTPHeaderField: "Accept")
 
@@ -116,12 +116,12 @@ Create a session with the interceptor and use it for all protected requests:
 let interceptor = ThunderIDRequestInterceptor(state: state)
 let session = Session(interceptor: interceptor)
 
-session.request("https://localhost:8090/api/resource")
+session.request("{{ServerUrl}}/api/resource")
     .responseDecodable(of: MyResponse.self) { response in
         print(response.value ?? "No data")
     }
 ```
 
 :::tip API Server URL
-The <ProductName /> API server runs on `https://localhost:8090` by default in local development. Replace this with your production server URL when deploying.
+The <ProductName /> API server runs on `{{ServerUrl}}` by default in local development. Replace this with your production server URL when deploying.
 :::

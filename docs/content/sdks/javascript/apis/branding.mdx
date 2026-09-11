@@ -17,7 +17,7 @@ Retrieve the branding preference configuration for an organization or applicatio
 import { getBrandingPreference } from '@thunderid/javascript'
 
 const branding = await getBrandingPreference({
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   locale: 'en-US',
 })
 
@@ -94,7 +94,7 @@ Convert a `BrandingPreference` response into a `Theme` object compatible with `c
 ```ts
 import { getBrandingPreference, transformBrandingPreferenceToTheme } from '@thunderid/javascript'
 
-const branding = await getBrandingPreference({ baseUrl: 'https://localhost:8090' })
+const branding = await getBrandingPreference({ baseUrl: '{{ServerUrl}}' })
 const theme = transformBrandingPreferenceToTheme(branding)
 ```
 

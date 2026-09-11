@@ -22,7 +22,7 @@ void main() {
   runApp(
     ThunderIDProvider(
       config: ThunderIDConfig(
-        baseUrl: 'https://localhost:8090',
+        baseUrl: '{{ServerUrl}}',
         clientId: '<your-client-id>',
         afterSignInUrl: 'dev.thunderid.app://callback',
         afterSignOutUrl: 'dev.thunderid.app://logout',

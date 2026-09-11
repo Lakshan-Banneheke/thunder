@@ -34,7 +34,7 @@ All approaches follow the WebAuthn standard ceremony:
 ```yaml
 passkey:
   allowed_origins:
-    - "https://localhost:8090"
+    - "{{ServerUrl}}"
     - "https://localhost:3000"
 ```
 
@@ -54,7 +54,7 @@ The simplest way to enable passkeys is through <ProductName /> Gate, <ProductNam
 3. **Integrate with your application**:
    - Redirect users to <ProductName />'s OAuth2 authorize endpoint:
      ```text
-     https://localhost:8090/oauth2/authorize?client_id=<your-client-id>&redirect_uri=<your-callback>&response_type=code&scope=openid
+     {{ServerUrl}}/oauth2/authorize?client_id=<your-client-id>&redirect_uri=<your-callback>&response_type=code&scope=openid
      ```
    - <ProductName /> automatically redirects to <ProductName /> Gate (e.g., `https://localhost:5190/gate/signin`) based on the `gate_client` configuration in `deployment.yaml`
    - <ProductName /> Gate renders the authentication UI based on your selected flow, handling passkey WebAuthn ceremonies in the browser
@@ -85,7 +85,7 @@ This approach requires **no custom UI development** or direct WebAuthn API calls
 1) **Start registration.** Create WebAuthn creation options and a session token.
 
 ```bash
-curl -k -X POST https://localhost:8090/register/passkey/start \
+curl -k -X POST {{ServerUrl}}/register/passkey/start \
   -H "Content-Type: application/json" \
   -d '{
     "userId": "<user-id>",
@@ -107,7 +107,7 @@ Response fields:
 3) **Finish registration.** Send the attestation result with the session token.
 
 ```bash
-curl -k -X POST https://localhost:8090/register/passkey/finish \
+curl -k -X POST {{ServerUrl}}/register/passkey/finish \
   -H "Content-Type: application/json" \
   -d '{
     "publicKeyCredential": {
@@ -130,7 +130,7 @@ On success, the API returns passkey registration metadata for the newly created 
 1) **Start authentication.** Request assertion options.
 
 ```bash
-curl -k -X POST https://localhost:8090/auth/passkey/start \
+curl -k -X POST {{ServerUrl}}/auth/passkey/start \
   -H "Content-Type: application/json" \
   -d '{
     "userId": "<user-id-optional>",
@@ -148,7 +148,7 @@ curl -k -X POST https://localhost:8090/auth/passkey/start \
 3) **Finish authentication.** Send the assertion result with the session token.
 
 ```bash
-curl -k -X POST https://localhost:8090/auth/passkey/finish \
+curl -k -X POST {{ServerUrl}}/auth/passkey/finish \
   -H "Content-Type: application/json" \
   -d '{
     "publicKeyCredential": {
@@ -181,7 +181,7 @@ Applications configured with the `authorization_code` grant type cannot start fl
 1) **Start the flow.** Send an initial flow request.
 
 ```bash
-curl -k -X POST https://localhost:8090/flow/execute \
+curl -k -X POST {{ServerUrl}}/flow/execute \
   -H "Content-Type: application/json" \
   -d '{
     "applicationId": "<app-id>",
@@ -196,7 +196,7 @@ curl -k -X POST https://localhost:8090/flow/execute \
 3) **Continue the flow.** Post the assertion back to the flow engine.
 
 ```bash
-curl -k -X POST https://localhost:8090/flow/execute \
+curl -k -X POST {{ServerUrl}}/flow/execute \
   -H "Content-Type: application/json" \
   -d '{
     "executionId": "<execution-id-from-step>",
@@ -220,7 +220,7 @@ curl -k -X POST https://localhost:8090/flow/execute \
 1) **Start a registration flow.** Send an initial flow request.
 
 ```bash
-curl -k -X POST https://localhost:8090/flow/execute \
+curl -k -X POST {{ServerUrl}}/flow/execute \
   -H "Content-Type: application/json" \
   -d '{
     "applicationId": "<app-id>",
@@ -237,7 +237,7 @@ curl -k -X POST https://localhost:8090/flow/execute \
 3) **Finish registration in the flow.** Post the attestation back to the flow engine.
 
 ```bash
-curl -k -X POST https://localhost:8090/flow/execute \
+curl -k -X POST {{ServerUrl}}/flow/execute \
   -H "Content-Type: application/json" \
   -d '{
     "executionId": "<execution-id-from-step>",

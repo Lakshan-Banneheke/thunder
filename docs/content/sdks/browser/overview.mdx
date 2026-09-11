@@ -55,7 +55,7 @@ const auth = new ThunderIDBrowserClient()
 
 await auth.initialize({
   clientId: '<your-client-id>',
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   afterSignInUrl: window.location.origin,
   afterSignOutUrl: window.location.origin,
 })
@@ -158,7 +158,7 @@ Pass a configuration object to `initialize()`:
 ```js
 await auth.initialize({
   clientId: '<your-client-id>',
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   afterSignInUrl: 'http://localhost:5173',
   afterSignOutUrl: 'http://localhost:5173',
   storage: 'sessionStorage',

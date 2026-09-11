@@ -17,7 +17,7 @@ Fetch user claims from the OIDC userinfo endpoint. Requires a valid access token
 import { getUserInfo } from '@thunderid/javascript'
 
 const user = await getUserInfo({
-  url: 'https://localhost:8090/oauth2/userinfo',
+  url: '{{ServerUrl}}/oauth2/userinfo',
   headers: {
     Authorization: `Bearer ${accessToken}`,
   },

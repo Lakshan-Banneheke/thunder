@@ -154,7 +154,7 @@ services:
   thunderid:
     image: ghcr.io/thunder-id/thunderid:<version>
     healthcheck:
-      test: ["CMD", "curl", "-fsk", "https://localhost:8090/health/liveness"]
+      test: ["CMD", "curl", "-fsk", "{{ServerUrl}}/health/liveness"]
       interval: 30s
       timeout: 10s
       retries: 3

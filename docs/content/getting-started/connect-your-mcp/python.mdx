@@ -196,8 +196,8 @@ openssl s_client -connect localhost:8090 -showcerts </dev/null 2>/dev/null | ope
 Create a `.env` file next to `server.py`:
 
 ```bash title=".env"
-THUNDERID_ISSUER=https://localhost:8090
-THUNDERID_JWKS_URI=https://localhost:8090/oauth2/jwks
+THUNDERID_ISSUER={{ServerUrl}}
+THUNDERID_JWKS_URI={{ServerUrl}}/oauth2/jwks
 MCP_AUDIENCE=http://localhost:8000/mcp
 THUNDERID_CA_CERT=./thunderid.cert
 ```
@@ -209,7 +209,7 @@ THUNDERID_CA_CERT=./thunderid.cert
 | `MCP_AUDIENCE` | The resource server identifier you registered in the previous step. `JWTVerifier` rejects tokens whose `aud` claim doesn't match. |
 | `THUNDERID_CA_CERT` | Path to the certificate you just exported. Must point to the actual file location; a relative path like `./thunderid.cert` is resolved from the directory you start the server in. |
 
-Both the issuer and the JWKS URI are discoverable from [https://localhost:8090/.well-known/openid-configuration](https://localhost:8090/.well-known/openid-configuration) if you're pointing at a non-default host or port.
+Both the issuer and the JWKS URI are discoverable from <ServerUrl /> if you're pointing at a non-default host or port.
 
 :::note Certificate not found at startup
 If the server fails at startup with a `FileNotFoundError`, `THUNDERID_CA_CERT` doesn't point to the exported file. Check the path, or re-export the certificate. The export only writes a local file, nothing is added to your system trust store, and it regenerates whenever <ProductName /> is reinstalled or rebuilt, so re-export after a rebuild.
@@ -247,7 +247,7 @@ The response names <ProductName /> as the authorization server and lists the fou
 ```json
 {
   "resource": "http://localhost:8000/mcp",
-  "authorization_servers": ["https://localhost:8090/"],
+  "authorization_servers": ["{{ServerUrl}}/"],
   "scopes_supported": ["add", "subtract", "multiply", "divide"],
   "bearer_methods_supported": ["header"]
 }
@@ -349,7 +349,7 @@ Restart <ProductName /> after saving the file.
 Optionally, confirm DCR is live before connecting Claude Code by registering a throwaway public client directly:
 
 ```bash
-curl -sk -i -X POST https://localhost:8090/oauth2/dcr/register \
+curl -sk -i -X POST {{ServerUrl}}/oauth2/dcr/register \
   -H "Content-Type: application/json" \
   -d '{
     "client_name": "dcr-probe",

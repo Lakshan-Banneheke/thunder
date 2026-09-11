@@ -52,7 +52,7 @@ export TOKEN="<access-token>"
 Resource servers are managed through the Resource Management API. Create the `wayfinder` resource server. Replace `<default-ou-id>` with the ID of your default organization unit (look it up via `GET /organization-units`):
 
 ```bash
-curl -k -X POST https://localhost:8090/resource-servers \
+curl -k -X POST {{ServerUrl}}/resource-servers \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -70,7 +70,7 @@ The response includes the resource server's `id`, referred to below as `<wayfind
 Add the `booking` resource under the resource server. Its `handle` becomes the first half of each permission string:
 
 ```bash
-curl -k -X POST https://localhost:8090/resource-servers/<wayfinder-rs-id>/resources \
+curl -k -X POST {{ServerUrl}}/resource-servers/<wayfinder-rs-id>/resources \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{ "name": "Booking", "handle": "booking" }'
@@ -84,7 +84,7 @@ Add the three actions under the `booking` resource. Each action's `handle` becom
 
 ```bash
 for action in "Read:read" "Create:create" "Cancel:cancel"; do
-  curl -k -X POST https://localhost:8090/resource-servers/<wayfinder-rs-id>/resources/<booking-resource-id>/actions \
+  curl -k -X POST {{ServerUrl}}/resource-servers/<wayfinder-rs-id>/resources/<booking-resource-id>/actions \
     -H "Authorization: Bearer $TOKEN" \
     -H "Content-Type: application/json" \
     -d "{ \"name\": \"${action%%:*}\", \"handle\": \"${action##*:}\" }"
@@ -125,7 +125,7 @@ Create the `Traveler` role and assign it to John Doe so he can book from his fir
 Roles and their permissions are managed through the Role Management API. Create the role with the three `booking:*` permissions in one call. Replace `<default-ou-id>` with the ID of your default organization unit (look it up via `GET /organization-units`) and `<wayfinder-rs-id>` with the ID returned when you created the `wayfinder` resource server.
 
 ```bash
-curl -k -X POST https://localhost:8090/roles \
+curl -k -X POST {{ServerUrl}}/roles \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{

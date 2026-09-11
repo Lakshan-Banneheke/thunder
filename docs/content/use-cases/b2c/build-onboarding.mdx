@@ -36,7 +36,7 @@ See [Authorization](../../../key-concepts/authorization).
 Save the JSON below as `wayfinder-onboarding-flow.json` and POST it to the flows API. The flow validates admin permission, resolves the user type, prompts for the staff role (Support or DestinationsAdmin), collects the invitee's email, sends the invitation, and on accept provisions the new user with the matching role attached via `properties.assignRole`.
 
 ```bash
-curl -k -X POST https://localhost:8090/flows \
+curl -k -X POST {{ServerUrl}}/flows \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d @wayfinder-onboarding-flow.json
@@ -374,7 +374,7 @@ See [Build a Flow](../../../guides/flows/build-a-flow).
 The user onboarding flow is a server-wide default: <ProductName /> runs it whenever an admin creates a user, in the Console or through the API. Point the server default at your flow by setting `userOnboardingFlow.defaultHandle` in the server-config `flow` section:
 
 ```bash
-curl -k -X PUT https://localhost:8090/server-config/flow \
+curl -k -X PUT {{ServerUrl}}/server-config/flow \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d '{ "userOnboardingFlow": { "defaultHandle": "wayfinder-onboarding-flow" } }'

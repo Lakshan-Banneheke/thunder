@@ -69,7 +69,7 @@ The registration flow drives [Self Sign-Up](../try-it-out/self-sign-up). It:
 Save the JSON below as `wayfinder-registration-flow.json` and POST it to the flows API:
 
 ```bash
-curl -k -X POST https://localhost:8090/flows \
+curl -k -X POST {{ServerUrl}}/flows \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d @wayfinder-registration-flow.json
@@ -221,7 +221,7 @@ SMTP must be configured for the recovery email to reach the user. The SMTP step 
 Save the JSON below as `wayfinder-recovery-flow.json` and POST it to the flows API:
 
 ```bash
-curl -k -X POST https://localhost:8090/flows \
+curl -k -X POST {{ServerUrl}}/flows \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d @wayfinder-recovery-flow.json

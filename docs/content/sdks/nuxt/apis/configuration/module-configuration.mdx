@@ -16,7 +16,7 @@ export default defineNuxtConfig({
   thunderid: {
     clientId: '<your-client-id>',
     clientSecret: '<your-client-secret>',
-    baseUrl: 'https://localhost:8090',
+    baseUrl: '{{ServerUrl}}',
     afterSignInUrl: '/dashboard',
     afterSignOutUrl: '/',
     scopes: ['openid', 'profile', 'internal_login'],
@@ -49,7 +49,7 @@ Secret values should be provided through environment variables rather than hardc
 
 | Option | Type | Required | Description |
 | :--- | :--- | :---: | :--- |
-| `baseUrl` | `string` | ✅ | The base URL of the <ProductName /> instance (e.g., `https://localhost:8090`) |
+| `baseUrl` | `string` | ✅ | The base URL of the <ProductName /> instance (e.g., `{{ServerUrl}}`) |
 | `clientId` | `string` | ✅ | Client ID of your application |
 | `clientSecret` | `string` | ✅ | Client secret of your application |
 | `sessionSecret` | `string` | ✅ | Secret used to sign session cookies. Must be at least 32 characters |

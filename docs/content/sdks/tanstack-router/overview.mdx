@@ -72,7 +72,7 @@ function App() {
   return (
     <ThunderIDProvider
       clientId="<your-client-id>"
-      baseUrl="https://localhost:8090"
+      baseUrl="{{ServerUrl}}"
       afterSignInUrl="http://localhost:5173/callback"
     >
       <RouterProvider router={router} />

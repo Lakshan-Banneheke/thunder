@@ -25,7 +25,7 @@ import Dashboard from './pages/Dashboard'
 
 function App() {
   return (
-    <ThunderIDProvider clientId="<your-client-id>" baseUrl="https://localhost:8090">
+    <ThunderIDProvider clientId="<your-client-id>" baseUrl="{{ServerUrl}}">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />

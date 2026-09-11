@@ -18,7 +18,7 @@ import { executeEmbeddedUserOnboardingFlowV2, EmbeddedSignUpFlowStatusV2 } from 
 
 // Step 1 — Initiate onboarding
 const step1 = await executeEmbeddedUserOnboardingFlowV2({
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   payload: {
     applicationId: '<your-app-id>',
     flowType: 'USER_ONBOARDING',
@@ -27,7 +27,7 @@ const step1 = await executeEmbeddedUserOnboardingFlowV2({
 
 // Step 2 — Complete profile
 const step2 = await executeEmbeddedUserOnboardingFlowV2({
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   payload: {
     executionId: step1.executionId,
     inputs: {

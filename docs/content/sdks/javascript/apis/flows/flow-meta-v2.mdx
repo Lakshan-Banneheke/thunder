@@ -15,7 +15,7 @@ description: Fetch aggregated application, organization, and theme metadata for 
 import { getFlowMetaV2, FlowMetaType } from '@thunderid/javascript'
 
 const meta = await getFlowMetaV2({
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   type: FlowMetaType.App,
   id: '<your-app-id>',
   language: 'en-US',

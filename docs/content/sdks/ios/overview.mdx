@@ -48,7 +48,7 @@ struct MyApp: App {
         WindowGroup {
             ContentView()
                 .thunderIDProvider(config: ThunderIDConfig(
-                    baseUrl: "https://localhost:8090",
+                    baseUrl: "{{ServerUrl}}",
                     clientId: "<your-client-id>",
                     scopes: ["openid", "profile", "email"],
                     afterSignInUrl: "io.thunderid.b2c://callback",

@@ -52,7 +52,7 @@ The user signs in through the agent's **Authentication** flow, and <ProductName 
 Confirm `authorization_code` is in `grantTypes` (with `code` in `responseTypes`) and `pkceRequired` is `true`, then run the standard code exchange:
 
 ```bash
-curl -X POST https://localhost:8090/oauth2/token \
+curl -X POST {{ServerUrl}}/oauth2/token \
   -H 'Content-Type: application/x-www-form-urlencoded' \
   -u '<CLIENT_ID>:<CLIENT_SECRET>' \
   -d 'grant_type=authorization_code' \
@@ -112,7 +112,7 @@ On the **Advanced** tab, add the **Token Exchange** grant (available in either o
 Add `urn:ietf:params:oauth:grant-type:token-exchange` to `grantTypes`, then:
 
 ```bash
-curl -X POST https://localhost:8090/oauth2/token \
+curl -X POST {{ServerUrl}}/oauth2/token \
   -H 'Content-Type: application/x-www-form-urlencoded' \
   -u '<CLIENT_ID>:<CLIENT_SECRET>' \
   -d 'grant_type=urn:ietf:params:oauth:grant-type:token-exchange' \

@@ -33,7 +33,7 @@ The wallet scans QR codes that point at <ProductName />, so it must be reachable
 Use [cloudflared](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/do-more-with-tunnels/trycloudflare/) or any HTTPS tunnel:
 
 ```bash
-cloudflared tunnel --url https://localhost:8090 --no-tls-verify
+cloudflared tunnel --url {{ServerUrl}} --no-tls-verify
 ```
 
 The terminal prints a public URL such as `https://<random>.trycloudflare.com`.

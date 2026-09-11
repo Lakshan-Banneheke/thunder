@@ -38,7 +38,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   thunderID({
-    baseUrl: 'https://localhost:8090',
+    baseUrl: '{{ServerUrl}}',
     clientId: '<your-client-id>',
     clientSecret: '<your-client-secret>',
     afterSignInUrl: 'http://localhost:3000/login',

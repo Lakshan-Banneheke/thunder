@@ -49,7 +49,7 @@ Start a local <ProductName /> instance. Pick the method that works best for you:
 
 <RunThunderID />
 
-Once it's running, the console is available at [https://localhost:8090/console](https://localhost:8090/console).
+Once it's running, the console is available at <ConsoleUrl />.
 
 ## Create an Application
 
@@ -110,7 +110,7 @@ struct MyApp: App {
         WindowGroup {
             ContentView()
                 .thunderIDProvider(config: ThunderIDConfig(
-                    baseUrl: "https://localhost:8090",
+                    baseUrl: "{{ServerUrl}}",
                     scopes: ["openid", "profile", "email"],
                     applicationId: "<your-application-id>"
                 ))

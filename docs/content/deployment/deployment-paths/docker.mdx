@@ -69,7 +69,7 @@ docker run -d \
   ghcr.io/thunder-id/thunderid:<version>
 ```
 
-<ProductName /> is now running at `https://localhost:8090`. Mount the same `thunderid-certs` and `thunderid-secrets` volumes you used during setup so the server reads the generated key material and the Direct Auth Secret.
+<ProductName /> is now running at `{{ServerUrl}}`. Mount the same `thunderid-certs` and `thunderid-secrets` volumes you used during setup so the server reads the generated key material and the Direct Auth Secret.
 
 To follow the logs:
 
@@ -84,7 +84,7 @@ To override the default server configuration, mount a custom `deployment.yaml` f
 ```yaml
 server:
   hostname: "0.0.0.0"
-  public_url: "https://localhost:8090"
+  public_url: "{{ServerUrl}}"
   port: 8090
   security:
     direct_auth_secret: "file://config/secrets/direct_auth_secret"
@@ -128,8 +128,8 @@ Once the container is running, access <ProductName /> at the following endpoints
 
 | Endpoint | URL |
 |----------|-----|
-| Server URL | `https://localhost:8090` |
-| <ProductName /> Console | `https://localhost:8090/console` |
+| Server URL | `{{ServerUrl}}` |
+| <ProductName /> Console | `{{ConsoleUrl}}` |
 
 ## Database Setup
 

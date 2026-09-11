@@ -23,7 +23,7 @@ suspend fun fetchProtectedResource(thunder: ThunderIDState): String {
     val token = thunder.client.getAccessToken()
 
     return withContext(Dispatchers.IO) {
-        val connection = URL("https://localhost:8090/api/resource").openConnection() as HttpURLConnection
+        val connection = URL("{{ServerUrl}}/api/resource").openConnection() as HttpURLConnection
         connection.setRequestProperty("Authorization", "Bearer $token")
         connection.setRequestProperty("Accept", "application/json")
 
@@ -104,7 +104,7 @@ val client = OkHttpClient.Builder()
     .build()
 
 val request = Request.Builder()
-    .url("https://localhost:8090/api/resource")
+    .url("{{ServerUrl}}/api/resource")
     .build()
 
 client.newCall(request).execute().use { response ->
@@ -118,7 +118,7 @@ If your project uses [Retrofit](https://square.github.io/retrofit/), combine it 
 
 ```kotlin
 val retrofit = Retrofit.Builder()
-    .baseUrl("https://localhost:8090/")
+    .baseUrl("{{ServerUrl}}/")
     .client(
         OkHttpClient.Builder()
             .addInterceptor(ThunderIDInterceptor(thunder))
@@ -131,5 +131,5 @@ val api = retrofit.create(MyApiService::class.java)
 ```
 
 :::tip API Server URL
-The <ProductName /> API server runs on `https://localhost:8090` by default in local development. Replace this with your production server URL when deploying.
+The <ProductName /> API server runs on `{{ServerUrl}}` by default in local development. Replace this with your production server URL when deploying.
 :::

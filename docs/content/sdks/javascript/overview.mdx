@@ -71,7 +71,7 @@ const auth = new MyCustomClient()
 
 await auth.initialize({
   clientId: '<your-client-id>',
-  baseUrl: 'https://localhost:8090',
+  baseUrl: '{{ServerUrl}}',
   afterSignInUrl: window.location.origin,
 })
 ```

@@ -148,7 +148,7 @@ The SDK renders the component tree automatically. Without the SDK, your applicat
 Request:
 
 ```bash
-curl https://localhost:8090/flow/execute \
+curl {{ServerUrl}}/flow/execute \
   --request POST \
   --header 'Content-Type: application/json' \
   --data '{
@@ -215,7 +215,7 @@ In non-verbose mode (`verbose: false`), each response includes only `inputs` and
 Request:
 
 ```bash
-curl https://localhost:8090/flow/execute \
+curl {{ServerUrl}}/flow/execute \
   --request POST \
   --header 'Content-Type: application/json' \
   --data '{
@@ -258,7 +258,7 @@ The following shows a username and password flow. Your application starts the fl
 Request:
 
 ```bash
-curl https://localhost:8090/flow/execute \
+curl {{ServerUrl}}/flow/execute \
   --request POST \
   --header 'Content-Type: application/json' \
   --data '{
@@ -292,7 +292,7 @@ Your application renders the username and password fields, collects input, and s
 Request:
 
 ```bash
-curl https://localhost:8090/flow/execute \
+curl {{ServerUrl}}/flow/execute \
   --request POST \
   --header 'Content-Type: application/json' \
   --data '{
@@ -353,7 +353,7 @@ On a fresh setup, the `setup.sh` / `setup.ps1` script generates a secret, writes
 This suits the intended Direct API callers, such as CLI tools, automation scripts, and server-to-server integrations, which can hold a configured secret. Browser and mobile applications, which cannot safely store a static secret, should use the [Redirect-Based](#redirect-based) or [App-Native](#app-native) model instead.
 
 ```bash
-curl -X POST https://localhost:8090/auth/credentials/authenticate \
+curl -X POST {{ServerUrl}}/auth/credentials/authenticate \
   -H 'Content-Type: application/json' \
   -H 'Direct-Auth-Secret: <direct-auth-secret>' \
   -d '{
@@ -389,7 +389,7 @@ The following endpoints support step-up authentication:
 If you do not need an assertion token, set `skip_assertion: true` in the request body:
 
 ```bash
-curl -X POST https://localhost:8090/auth/credentials/authenticate \
+curl -X POST {{ServerUrl}}/auth/credentials/authenticate \
   -H 'Content-Type: application/json' \
   -d '{
     "identifiers": { "username": "thor" },
@@ -411,7 +411,7 @@ Password + SMS OTP
 Request:
 
 ```bash
-curl -X POST https://localhost:8090/auth/credentials/authenticate \
+curl -X POST {{ServerUrl}}/auth/credentials/authenticate \
   -H 'Content-Type: application/json' \
   -d '{
     "identifiers": { "username": "thor" },
@@ -435,7 +435,7 @@ Response:
 Request:
 
 ```bash
-curl -X POST https://localhost:8090/auth/otp/sms/send \
+curl -X POST {{ServerUrl}}/auth/otp/sms/send \
   -H 'Content-Type: application/json' \
   -d '{
     "senderId": "<sender_id>",
@@ -457,7 +457,7 @@ Response:
 Request:
 
 ```bash
-curl -X POST https://localhost:8090/auth/otp/sms/verify \
+curl -X POST {{ServerUrl}}/auth/otp/sms/verify \
   -H 'Content-Type: application/json' \
   -d '{
     "sessionToken": "<session_token_from_step_2>",

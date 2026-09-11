@@ -38,7 +38,7 @@ const app = express();
 app.use(cookieParser());
 app.use(
   thunderID({
-    baseUrl: 'https://localhost:8090',
+    baseUrl: '{{ServerUrl}}',
     clientId: '<your-client-id>',
     clientSecret: '<your-client-secret>',
     afterSignOutUrl: 'http://localhost:3000/logout',

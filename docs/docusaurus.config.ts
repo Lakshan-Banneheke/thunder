@@ -55,6 +55,7 @@ const docsRehypePlugins: DocsOptions['rehypePlugins'] = [
       productName: productConfig.project.name,
       productSlug: productConfig.project.name.toLowerCase(),
       replacements: {
+        '{{ServerUrl}}': productConfig.local.serverUrl,
         '{{ConsoleUrl}}': productConfig.local.consoleUrl,
         '{{WayFinderSampleUrl}}': productConfig.local.samples.wayfinderUrl,
         '{{WayFinderMailUrl}}': productConfig.local.samples.wayfinderMailUrl,

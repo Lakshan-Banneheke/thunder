@@ -25,7 +25,7 @@ import { ThunderIDNodeConfig } from '@thunderid/node'
 // initialized with this configuration
 const config: ThunderIDNodeConfig = {
   clientId: '<your-client-id>',
-  serverOrigin: 'https://localhost:8090',
+  serverOrigin: '{{ServerUrl}}',
   afterSignInUrl: 'http://localhost:3000/callback',
   afterSignOutUrl: 'http://localhost:3000',
   scope: ['openid', 'profile'],

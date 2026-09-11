@@ -32,7 +32,7 @@ Each call then sends `-H "Authorization: Bearer $TOKEN"`.
    Invoke the **Resource Management API** to create the resource server. Set the identifier to `http://localhost:8790/chat`, the chat API audience. Replace `<organization-unit-id>` with the ID of your default organization unit (look it up via `GET /organization-units`):
 
    ```bash
-   curl -kL -X POST https://localhost:8090/resource-servers \
+   curl -kL -X POST {{ServerUrl}}/resource-servers \
      -H 'Content-Type: application/json' \
      -H "Authorization: Bearer $TOKEN" \
      -d '{
@@ -47,7 +47,7 @@ Each call then sends `-H "Authorization: Bearer $TOKEN"`.
    Add a resource with handle `agent` under it:
 
    ```bash
-   curl -kL -X POST https://localhost:8090/resource-servers/<wayfinder-agent-rs-id>/resources \
+   curl -kL -X POST {{ServerUrl}}/resource-servers/<wayfinder-agent-rs-id>/resources \
      -H 'Content-Type: application/json' \
      -H "Authorization: Bearer $TOKEN" \
      -d '{ "name": "Agent", "handle": "agent" }'
@@ -56,7 +56,7 @@ Each call then sends `-H "Authorization: Bearer $TOKEN"`.
    Then add one action under the resource:
 
    ```bash
-   curl -kL -X POST https://localhost:8090/resource-servers/<wayfinder-agent-rs-id>/resources/<agent-resource-id>/actions \
+   curl -kL -X POST {{ServerUrl}}/resource-servers/<wayfinder-agent-rs-id>/resources/<agent-resource-id>/actions \
      -H 'Content-Type: application/json' \
      -H "Authorization: Bearer $TOKEN" \
      -d '{ "name": "Access", "handle": "access" }'
@@ -73,7 +73,7 @@ Each call then sends `-H "Authorization: Bearer $TOKEN"`.
    Invoke the **Resource Management API** again. The identifier is `http://localhost:8787/mcp`, a URL-shaped identifier per [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) that matches what the Wayfinder MCP server advertises in `/.well-known/oauth-protected-resource`. MCP Inspector reads that metadata and passes the value back as `resource=...` on `/oauth2/token`; <ProductName /> would reject the request with `invalid_target` otherwise. This resource server protects both the REST surface (`/api/*`) and the MCP surface (`/mcp`) of the Wayfinder server. Both check the same `booking:*` permissions:
 
    ```bash
-   curl -kL -X POST https://localhost:8090/resource-servers \
+   curl -kL -X POST {{ServerUrl}}/resource-servers \
      -H 'Content-Type: application/json' \
      -H "Authorization: Bearer $TOKEN" \
      -d '{
@@ -88,7 +88,7 @@ Each call then sends `-H "Authorization: Bearer $TOKEN"`.
    Add a resource with handle `booking`:
 
    ```bash
-   curl -kL -X POST https://localhost:8090/resource-servers/<wayfinder-rs-id>/resources \
+   curl -kL -X POST {{ServerUrl}}/resource-servers/<wayfinder-rs-id>/resources \
      -H 'Content-Type: application/json' \
      -H "Authorization: Bearer $TOKEN" \
      -d '{ "name": "Booking", "handle": "booking" }'
@@ -97,7 +97,7 @@ Each call then sends `-H "Authorization: Bearer $TOKEN"`.
    Then add four actions under the resource. Repeat the call below for each handle (`read`, `create`, `cancel`, `recommend`):
 
    ```bash
-   curl -kL -X POST https://localhost:8090/resource-servers/<wayfinder-rs-id>/resources/<booking-resource-id>/actions \
+   curl -kL -X POST {{ServerUrl}}/resource-servers/<wayfinder-rs-id>/resources/<booking-resource-id>/actions \
      -H 'Content-Type: application/json' \
      -H "Authorization: Bearer $TOKEN" \
      -d '{ "name": "Read", "handle": "read" }'
@@ -113,7 +113,7 @@ Each call then sends `-H "Authorization: Bearer $TOKEN"`.
    Configure the booking resource server as the default for Wayfinder web sign-in tokens. The web application requests `booking:*` permissions without a `resource`, so the default must be the resource server that defines those permissions. The chat widget targets `http://localhost:8790/chat` explicitly.
 
    ```bash
-   curl -kL -X PUT https://localhost:8090/server-config/defaultResourceServer \
+   curl -kL -X PUT {{ServerUrl}}/server-config/defaultResourceServer \
      -H 'Content-Type: application/json' \
      -H "Authorization: Bearer $TOKEN" \
      -d '{ "resourceServerId": "<wayfinder-rs-id>" }'
@@ -124,7 +124,7 @@ Each call then sends `-H "Authorization: Bearer $TOKEN"`.
    Send a `POST` to `/roles`. The role grants `agent:access` on the `wayfinder-agent` resource server:
 
    ```bash
-   curl -kL -X POST https://localhost:8090/roles \
+   curl -kL -X POST {{ServerUrl}}/roles \
      -H 'Content-Type: application/json' \
      -H "Authorization: Bearer $TOKEN" \
      -d '{
@@ -145,7 +145,7 @@ Each call then sends `-H "Authorization: Bearer $TOKEN"`.
    Grant it `booking:read`, `booking:create`, and `booking:cancel` on `wayfinder`:
 
    ```bash
-   curl -kL -X POST https://localhost:8090/roles \
+   curl -kL -X POST {{ServerUrl}}/roles \
      -H 'Content-Type: application/json' \
      -H "Authorization: Bearer $TOKEN" \
      -d '{
@@ -166,7 +166,7 @@ Each call then sends `-H "Authorization: Bearer $TOKEN"`.
    Grant it `booking:recommend` on `wayfinder`. This role will be assigned to the Wayfinder Concierge in a later step, not to a user:
 
    ```bash
-   curl -kL -X POST https://localhost:8090/roles \
+   curl -kL -X POST {{ServerUrl}}/roles \
      -H 'Content-Type: application/json' \
      -H "Authorization: Bearer $TOKEN" \
      -d '{
