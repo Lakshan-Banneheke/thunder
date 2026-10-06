@@ -32,7 +32,7 @@ These backends carry structured **observability events** (token issuance, flow e
 
 <ProductName /> publishes internal events, such as token issuance and authentication flow execution, as OpenTelemetry spans. Events with the same `TraceID` are grouped into a single distributed trace.
 
-<ProductName /> exports spans over **OTLP gRPC**. You can point <ProductName /> directly at a backend that accepts OTLP (such as Jaeger or Grafana Tempo), or route spans through an OpenTelemetry Collector for additional processing and fan-out.
+<ProductName /> exports spans over OTLP using gRPC by default, or over HTTP with protobuf-encoded payloads. You can point <ProductName /> directly at a backend that accepts OTLP (such as Jaeger or Grafana Tempo), or route spans through an OpenTelemetry Collector for additional processing and fan-out.
 
 ### Prerequisites
 
@@ -56,6 +56,7 @@ observability:
       enabled: true
       exporter_type: otlp
       otlp_endpoint: "localhost:4317"
+      otlp_protocol: grpc
       service_name: "thunderid-iam"
       service_version: "1.0.0"
       environment: "production"
@@ -65,14 +66,46 @@ observability:
 
 Key settings:
 
-- `otlp_endpoint`: The host and port of your OTLP receiver (gRPC). Do not include the scheme (`grpc://`).
+- `otlp_endpoint`: The host and port of your OTLP receiver. Do not include a scheme or path, such as `https://` or `/v1/traces`.
+- `otlp_protocol`: The OTLP transport, `grpc` (default) or `http/protobuf`. See [Export over HTTP](#export-over-http).
 - `service_name`: Identifies <ProductName /> in your tracing backend. Use a consistent name across deployments.
 - `sample_rate`: Set to `1.0` to capture all traces. Reduce this value for high-traffic deployments (for example, `0.1` samples 10% of traces).
-- `insecure`: Set to `true` only in development environments where TLS is not configured on the collector.
+- `insecure`: Set to `true` only in development environments where TLS is not configured on the collector. With `http/protobuf`, `true` sends spans over plain HTTP instead of HTTPS.
 
 :::note
 <ProductName /> must be restarted for configuration changes to take effect.
 :::
+
+#### Export over HTTP
+
+To send spans over OTLP/HTTP instead of gRPC, set `otlp_protocol` to `http/protobuf` and point `otlp_endpoint` at the receiver's HTTP port. OTLP receivers listen for HTTP on port `4318` by convention:
+
+```yaml
+observability:
+  enabled: true
+  output:
+    opentelemetry:
+      enabled: true
+      exporter_type: otlp
+      otlp_endpoint: "localhost:4318"
+      otlp_protocol: http/protobuf
+      service_name: "thunderid-iam"
+      insecure: false
+```
+
+<ProductName /> posts protobuf-encoded spans to the `/v1/traces` path on that endpoint. With `insecure: false`, it connects over HTTPS and verifies the receiver's certificate against the system trust store. With `insecure: true`, it connects over plain HTTP.
+
+The receiver configurations under [Deployment Patterns](#deployment-patterns) declare only the `grpc` protocol and publish only port `4317`. To receive spans over HTTP, add an `http` entry under `protocols` and publish port `4318`:
+
+```yaml
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "0.0.0.0:4317"
+      http:
+        endpoint: "0.0.0.0:4318"
+```
 
 #### Filter by Event Category
 
@@ -296,7 +329,7 @@ After restarting <ProductName />, trigger an authentication flow (for example, s
 If no spans appear, check the following:
 
 - Confirm `observability.enabled` is `true` and `observability.output.opentelemetry.enabled` is `true`.
-- Confirm `otlp_endpoint` matches the host and port of your OTLP receiver.
+- Confirm `otlp_endpoint` matches the host and port of your OTLP receiver, and that `otlp_protocol` matches the protocol served on that port. Receivers commonly serve gRPC on port `4317` and HTTP on port `4318`.
 - If using TLS, ensure the certificate chain is trusted or set `insecure: true` temporarily to rule out TLS issues.
 - Check <ProductName /> startup logs for any errors from the OpenTelemetry subscriber. <ProductName /> uses a lenient failure mode: if the OTLP endpoint is unreachable at startup, the server still starts but spans are silently dropped.
 - If you are using the OpenTelemetry Collector + Jaeger pattern, also check the Collector container logs. <ProductName /> may be exporting spans successfully while the Collector fails to forward them to Jaeger.

@@ -448,6 +448,7 @@ type ObservabilityOTelConfig struct {
 	Enabled        bool     `yaml:"enabled"         json:"enabled"`
 	ExporterType   string   `yaml:"exporter_type"   json:"exporter_type"`
 	OTLPEndpoint   string   `yaml:"otlp_endpoint"   json:"otlp_endpoint"`
+	OTLPProtocol   string   `yaml:"otlp_protocol"   json:"otlp_protocol"`
 	ServiceName    string   `yaml:"service_name"    json:"service_name"`
 	ServiceVersion string   `yaml:"service_version" json:"service_version"`
 	Environment    string   `yaml:"environment"     json:"environment"`

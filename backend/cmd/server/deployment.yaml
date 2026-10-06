@@ -91,3 +91,20 @@ email:
     from_address: "noreply@thunderid.dev"
     enable_start_tls: false
     enable_authentication: true
+
+gate_client:
+  port: 5190
+
+observability:
+  enabled: true
+  output:
+    opentelemetry:
+      enabled: true
+      exporter_type: otlp
+      otlp_endpoint: "localhost:4317"
+      service_name: "thunderid-iam"
+      environment: "local"
+      sample_rate: 1.0
+      insecure: true
+      categories:
+        - observability.authentication

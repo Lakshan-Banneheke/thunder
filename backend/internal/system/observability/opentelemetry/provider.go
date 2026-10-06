@@ -11,6 +11,7 @@ import (
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
@@ -23,6 +24,7 @@ type Config struct {
 	Enabled        bool    `json:"enabled"`
 	ExporterType   string  `json:"exporter_type"`   // "otlp", "stdout"
 	OTLPEndpoint   string  `json:"otlp_endpoint"`   // e.g., "localhost:4317"
+	OTLPProtocol   string  `json:"otlp_protocol"`   // "grpc" (default), "http/protobuf"
 	ServiceName    string  `json:"service_name"`    // e.g., "thunderid-iam"
 	ServiceVersion string  `json:"service_version"` // e.g., "1.0.0"
 	Environment    string  `json:"environment"`     // e.g., "production", "development"
@@ -111,12 +113,24 @@ func newTracerProvider(ctx context.Context, cfg Config) (*sdktrace.TracerProvide
 	return tracerProvider, nil
 }
 
-// createOTLPExporter creates an OTLP gRPC exporter.
+// createOTLPExporter creates an OTLP exporter for the configured protocol.
 func createOTLPExporter(ctx context.Context, cfg Config) (sdktrace.SpanExporter, error) {
 	if cfg.OTLPEndpoint == "" {
 		return nil, fmt.Errorf("OTLP endpoint is required when using otlp exporter")
 	}
 
+	switch cfg.OTLPProtocol {
+	case "", "grpc":
+		return createOTLPGRPCExporter(ctx, cfg)
+	case "http/protobuf":
+		return createOTLPHTTPExporter(ctx, cfg)
+	default:
+		return nil, fmt.Errorf("unsupported OTLP protocol: %s (supported: grpc, http/protobuf)", cfg.OTLPProtocol)
+	}
+}
+
+// createOTLPGRPCExporter creates an OTLP gRPC exporter.
+func createOTLPGRPCExporter(ctx context.Context, cfg Config) (sdktrace.SpanExporter, error) {
 	// Configure TLS based on the Insecure setting
 	opts := []otlptracegrpc.Option{
 		otlptracegrpc.WithEndpoint(cfg.OTLPEndpoint),
@@ -129,6 +143,20 @@ func createOTLPExporter(ctx context.Context, cfg Config) (sdktrace.SpanExporter,
 	// If Insecure is false, the default behavior is to use TLS with system certificates
 
 	return otlptracegrpc.New(ctx, opts...)
+}
+
+// createOTLPHTTPExporter creates an OTLP HTTP exporter that posts protobuf-encoded spans.
+func createOTLPHTTPExporter(ctx context.Context, cfg Config) (sdktrace.SpanExporter, error) {
+	opts := []otlptracehttp.Option{
+		otlptracehttp.WithEndpoint(cfg.OTLPEndpoint),
+	}
+
+	if cfg.Insecure {
+		// Use plain HTTP instead of HTTPS for development/testing
+		opts = append(opts, otlptracehttp.WithInsecure())
+	}
+
+	return otlptracehttp.New(ctx, opts...)
 }
 
 // createStdoutExporter creates a stdout exporter for testing.

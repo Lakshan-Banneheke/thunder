@@ -104,6 +104,20 @@ func (suite *OTelSubscriberTestSuite) TestInitialize_WithStdoutExporter() {
 	_ = sub.Close()
 }
 
+func (suite *OTelSubscriberTestSuite) TestInitialize_WithUnsupportedOTLPProtocol() {
+	cfg := &config.GetServerRuntime().Config.Observability.Output.OpenTelemetry
+	cfg.Enabled = true
+	cfg.ExporterType = "otlp"
+	cfg.OTLPEndpoint = "localhost:4318"
+	cfg.OTLPProtocol = "http/json"
+
+	sub := NewOTelSubscriber()
+	err := sub.Initialize()
+
+	assert.Error(suite.T(), err, "Initialize() should return error for unsupported OTLP protocol")
+	assert.Contains(suite.T(), err.Error(), "unsupported OTLP protocol")
+}
+
 func (suite *OTelSubscriberTestSuite) TestInitialize_WithDefaultCategories() {
 	cfg := &config.GetServerRuntime().Config.Observability.Output.OpenTelemetry
 	cfg.Enabled = true

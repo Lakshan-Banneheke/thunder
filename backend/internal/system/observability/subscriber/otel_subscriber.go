@@ -71,13 +71,15 @@ func (o *OTelSubscriber) Initialize() error {
 
 	o.logger.Debug(ctx, "Initializing OpenTelemetry subscriber",
 		log.String("exporterType", otelConfig.ExporterType),
-		log.String("endpoint", otelConfig.OTLPEndpoint))
+		log.String("endpoint", otelConfig.OTLPEndpoint),
+		log.String("protocol", otelConfig.OTLPProtocol))
 
 	// Convert our config to otel package config
 	otelProviderCfg := otelconfig.Config{
 		Enabled:        otelConfig.Enabled,
 		ExporterType:   otelConfig.ExporterType,
 		OTLPEndpoint:   otelConfig.OTLPEndpoint,
+		OTLPProtocol:   otelConfig.OTLPProtocol,
 		ServiceName:    otelConfig.ServiceName,
 		ServiceVersion: otelConfig.ServiceVersion,
 		Environment:    otelConfig.Environment,

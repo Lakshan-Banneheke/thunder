@@ -713,14 +713,15 @@ Exports events as OpenTelemetry spans to an OTLP-compatible backend such as Jaeg
 | Setting | Default | Description |
 |---------|---------|-------------|
 | `observability.output.opentelemetry.enabled` | `false` | If `true`, exports observability events as OpenTelemetry spans |
-| `observability.output.opentelemetry.exporter_type` | `otlp` | Exporter type: `otlp` (gRPC, for production) or `stdout` (for debugging) |
-| `observability.output.opentelemetry.otlp_endpoint` | `""` | OTLP gRPC endpoint, for example `localhost:4317`. Required when `exporter_type` is `otlp`. |
+| `observability.output.opentelemetry.exporter_type` | `otlp` | Exporter type: `otlp` (for production) or `stdout` (for debugging) |
+| `observability.output.opentelemetry.otlp_endpoint` | `""` | Host and port of the OTLP receiver, without a scheme. For example, `localhost:4317` for gRPC or `localhost:4318` for HTTP. Required when `exporter_type` is `otlp`. |
+| `observability.output.opentelemetry.otlp_protocol` | `grpc` | OTLP transport: `grpc` or `http/protobuf`. With `http/protobuf`, spans are posted to the `/v1/traces` path on `otlp_endpoint`. |
 | `observability.output.opentelemetry.service_name` | `""` | Service name included in all emitted spans, for example `thunderid-iam` |
 | `observability.output.opentelemetry.service_version` | `""` | Service version included in span resource attributes, for example `1.0.0` |
 | `observability.output.opentelemetry.environment` | `""` | Deployment environment included in span resource attributes, for example `production` |
 | `observability.output.opentelemetry.sample_rate` | `1.0` | Fraction of traces to sample. `1.0` samples all traces; `0.5` samples half. |
 | `observability.output.opentelemetry.categories` | `["observability.all"]` | Event categories to export. See [Event Categories](#event-categories) for valid values. |
-| `observability.output.opentelemetry.insecure` | `false` | If `true`, disables TLS for the OTLP connection. Use only in development environments. |
+| `observability.output.opentelemetry.insecure` | `false` | If `true`, disables TLS for the OTLP connection: `grpc` uses a plaintext connection and `http/protobuf` uses HTTP instead of HTTPS. Use only in development environments. |
 
 ### Event Categories
 

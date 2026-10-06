@@ -5,6 +5,12 @@ package opentelemetry
 
 import (
 	"context"
+	"encoding/pem"
+	"io"
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -535,6 +541,154 @@ func TestCreateOTLPExporter_MissingEndpoint(t *testing.T) {
 	if !strings.Contains(err.Error(), "endpoint is required") {
 		t.Errorf("Error should mention missing endpoint, got: %v", err)
 	}
+}
+
+func TestCreateOTLPExporter_UnsupportedProtocol(t *testing.T) {
+	ctx := context.Background()
+	cfg := Config{
+		OTLPEndpoint: "localhost:4318",
+		OTLPProtocol: "http/json",
+	}
+
+	exporter, err := createOTLPExporter(ctx, cfg)
+
+	if err == nil {
+		t.Error("createOTLPExporter() should return error for unsupported protocol")
+	}
+
+	if exporter != nil {
+		t.Error("createOTLPExporter() should return nil exporter for unsupported protocol")
+	}
+
+	if !strings.Contains(err.Error(), "unsupported OTLP protocol") {
+		t.Errorf("Error should mention unsupported OTLP protocol, got: %v", err)
+	}
+}
+
+func TestCreateOTLPExporter_GRPCProtocol(t *testing.T) {
+	ctx := context.Background()
+	cfg := Config{
+		OTLPEndpoint: "localhost:4317",
+		OTLPProtocol: "grpc",
+		Insecure:     true,
+	}
+
+	exporter, err := createOTLPExporter(ctx, cfg)
+	if err != nil {
+		t.Fatalf("createOTLPExporter() error = %v", err)
+	}
+
+	if exporter == nil {
+		t.Fatal("createOTLPExporter() returned nil exporter")
+	}
+	_ = exporter.Shutdown(ctx)
+}
+
+// otlpRequest captures the parts of an OTLP export request the HTTP exporter tests assert on.
+type otlpRequest struct {
+	method      string
+	path        string
+	contentType string
+	bodyLen     int
+}
+
+// newOTLPRequestRecorder returns a handler that records each request and a channel to read them from.
+func newOTLPRequestRecorder() (http.Handler, <-chan otlpRequest) {
+	requests := make(chan otlpRequest, 10)
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		body, _ := io.ReadAll(r.Body)
+		requests <- otlpRequest{
+			method:      r.Method,
+			path:        r.URL.Path,
+			contentType: r.Header.Get("Content-Type"),
+			bodyLen:     len(body),
+		}
+		w.Header().Set("Content-Type", "application/x-protobuf")
+		w.WriteHeader(http.StatusOK)
+	})
+	return handler, requests
+}
+
+// exportTestSpan initializes a provider with cfg, records one span, and flushes it to the exporter.
+func exportTestSpan(t *testing.T, cfg Config) {
+	t.Helper()
+	ctx := context.Background()
+
+	provider, err := Initialize(ctx, cfg)
+	if err != nil {
+		t.Fatalf("Initialize() error = %v", err)
+	}
+	defer func() { _ = provider.Shutdown(ctx) }()
+
+	_, span := provider.Tracer("test").Start(ctx, "test-span")
+	span.End()
+
+	if err := provider.ForceFlush(ctx); err != nil {
+		t.Fatalf("ForceFlush() error = %v", err)
+	}
+}
+
+// assertOTLPTraceRequest checks that one protobuf trace export reached the receiver.
+func assertOTLPTraceRequest(t *testing.T, requests <-chan otlpRequest) {
+	t.Helper()
+
+	select {
+	case req := <-requests:
+		if req.method != http.MethodPost {
+			t.Errorf("Expected POST, got %s", req.method)
+		}
+		if req.path != "/v1/traces" {
+			t.Errorf("Expected path /v1/traces, got %s", req.path)
+		}
+		if req.contentType != "application/x-protobuf" {
+			t.Errorf("Expected Content-Type application/x-protobuf, got %s", req.contentType)
+		}
+		if req.bodyLen == 0 {
+			t.Error("Expected a non-empty export request body")
+		}
+	case <-time.After(5 * time.Second):
+		t.Fatal("OTLP receiver did not receive an export request")
+	}
+}
+
+func TestNewTracerProvider_OTLPHTTPInsecure(t *testing.T) {
+	handler, requests := newOTLPRequestRecorder()
+	server := httptest.NewServer(handler)
+	defer server.Close()
+
+	exportTestSpan(t, Config{
+		Enabled:      true,
+		ExporterType: "otlp",
+		OTLPEndpoint: strings.TrimPrefix(server.URL, "http://"),
+		OTLPProtocol: "http/protobuf",
+		Insecure:     true,
+	})
+
+	assertOTLPTraceRequest(t, requests)
+}
+
+func TestNewTracerProvider_OTLPHTTPSecure(t *testing.T) {
+	handler, requests := newOTLPRequestRecorder()
+	server := httptest.NewTLSServer(handler)
+	defer server.Close()
+
+	// Trust the test server's self-signed certificate through the standard OTLP environment variable.
+	certPath := filepath.Join(t.TempDir(), "ca.pem")
+	certPEM := pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: server.Certificate().Raw})
+	if err := os.WriteFile(certPath, certPEM, 0o600); err != nil {
+		t.Fatalf("Failed to write test CA certificate: %v", err)
+	}
+	t.Setenv("OTEL_EXPORTER_OTLP_CERTIFICATE", certPath)
+
+	exportTestSpan(t, Config{
+		Enabled:      true,
+		ExporterType: "otlp",
+		OTLPEndpoint: strings.TrimPrefix(server.URL, "https://"),
+		OTLPProtocol: "http/protobuf",
+		Insecure:     false,
+	})
+
+	assertOTLPTraceRequest(t, requests)
 }
 
 func BenchmarkInitialize(b *testing.B) {
